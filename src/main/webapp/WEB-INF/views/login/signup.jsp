@@ -4,7 +4,7 @@
 </head>
 <body>
 	<h1>Register</h1>
-	<form action="/pro/login/signup/insert" method="POST">
+	<form action="/login/signup/insert" method="POST">
 		<label for="username">User Name:</label> <input id="username"
 			name="username" type="text" />
 		<p>

@@ -825,7 +825,7 @@ try{
 						<div id="writeFormBtn" class="btn _rosRestrict">
 							<span></span>
 							<p>
-								<strong><a href="/pro/sample/cafeWrite" class="m-tcol-c b"
+								<strong><a href="/board/cafeWrite" class="m-tcol-c b"
 									onclick="clickcr(this,'abt.wrtlist', '', '', event);"><img
 										src="http://cafeimgs.naver.net/cafe4/ico-btn-write.gif"
 										width="10" height="10" alt="">글쓰기</a></strong>
@@ -843,12 +843,26 @@ try{
 						</div>
 
 
+						<div id="modifyFormBtn" class="btn _rosRestrict">
+							<span></span>
+							<p>
+								<a href="http://10.110.242.87/board/UpdateBoard?boardNo=${boardDetail.boardNo }" class="m-tcol-c">수정</a>
+							</p>
+						</div>
 
+
+						
+						<div class="btn _rosRestrict">
+							<span></span>
+							<p><a href="http://10.110.242.87/board/deleteBoard?boardNo=${boardDetail.boardNo }" class="m-tcol-c">삭제</a></p>
+						</div>
+						
+						
 
 						<div class="btn" onclick="goList();">
 							<span></span>
 							<p>
-								<a href="http://localhost:8080/pro/sample/cafeMain" class="m-tcol-c">목록</a>
+								<a href="http://10.110.242.87/board/cafeMain?page=1" class="m-tcol-c">목록</a>
 							</p>
 						</div>
 					</div>
@@ -2291,14 +2305,7 @@ lcs_do_gdid('90000004_017FE358000E2FB400000000',etc);
     }
 
 	function goList() {
-		var sNextUrl = '/ArticleList.nhn?search.clubid=25158488&search.boardtype=L&search.page=1&userDisplay=&search.specialmenutype=';
-		
-		  
-		  
-		  
-		  
-		  
-		  
+		var sNextUrl = '/board/cafeMain?page=1';
 		
 		if(!!$Agent() && $Agent().macSafari){
 			top.document.location.href = sNextUrl;
@@ -3111,62 +3118,5 @@ function saveNDrive(path, filename, filesize) {
 	</form>
 
 
-</body>
-</html>
-
-<html lang="ko">
-<head>
-
-</head>
-<body>
-	<table class="board_view">
-		<colgroup>
-			<col width="15%" />
-			<col width="35%" />
-			<col width="15%" />
-			<col width="35%" />
-		</colgroup>
-		<caption>게시글 상세</caption>
-		<tbody>
-			<tr>
-				<th scope="row">글 번호</th>
-				<td>${boardDetail.boardNo }</td>
-			</tr>
-			<tr>
-				<td colspan="4">${boardDetail.content}</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<a href="#this" class="btn" id="list">목록으로</a>
-	<a href="#this" class="btn" id="update">수정하기</a>
-
-	<script type="text/javascript">
-        $(document).ready(function(){
-            $("#list").on("click", function(e){ //목록으로 버튼
-                e.preventDefault();
-                fn_openBoardList();
-            });
-             
-            $("#update").on("click", function(e){
-                e.preventDefault();
-                fn_openBoardUpdate();
-            });
-        });
-         
-        function fn_openBoardList(){
-            var comSubmit = new ComSubmit();
-            comSubmit.setUrl("<c:url value='/sample/openBoardList' />");
-            comSubmit.submit();
-        }
-         
-        function fn_openBoardUpdate(){
-            var boardNo = "${boardDetail.boardNo}";
-            var comSubmit = new ComSubmit();
-            comSubmit.setUrl("<c:url value='/sample/openBoardUpdate' />");
-            comSubmit.addParam("boardNo", boardNo);
-            comSubmit.submit();
-        }
-    </script>
 </body>
 </html>

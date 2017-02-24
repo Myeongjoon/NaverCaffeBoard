@@ -21,7 +21,6 @@ public class LoginController {
 
 	@RequestMapping(value = "/")
 	public String home(Model model) {
-		
 		return "/home";
 	}
 	
@@ -35,14 +34,15 @@ public class LoginController {
 		return "/login/signup";
 	}
 
+	/*
+	 * 사용자 추가.
+	 * 
+	 * 
+	 * */
+	
+	
 	@RequestMapping(value = "/login/signup/insert")
 	public String InsertSignUpValues(User user,Model model) throws Exception {
-		if (loginService.insertUser(user)) {
-			model.addAttribute("isAdded", true);
-			return "/login/login";
-		} else {
-			model.addAttribute("isExisting", true);
-			return "/login/signup";
-		}
+		return loginService.insertUser(user) ? "/login/login" : "/login/signup";
 	}
 }

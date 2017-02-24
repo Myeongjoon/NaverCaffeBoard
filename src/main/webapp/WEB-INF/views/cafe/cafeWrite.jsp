@@ -844,7 +844,7 @@ var oCL = new Ju.controlLayer();
 							<div>
 								<input type="text" name="subject"
 									onkeyup="oCafeWrite.clearInitMessage(this); this.focus(); javascript:frm_subject_keyup(); return false;"
-									value="게시글 제목을 입력하세요" id="subject" class="box_input"
+									value="<c:if test="${boardDetail.title != '' || boardDetail.title ne null}">${boardDetail.title}</c:if>" id="subject" class="box_input"
 									onclick="oCafeWrite.clearInitMessage(this); this.focus(); clickcr(this, 'wrt.temp', '', '', event); return false;"
 									onBlur="oCafeWrite.showSuicideSaver(this); return false;">
 								<span id="tempsaving_text" class="save">임시 저장된 글 <strong
@@ -4585,11 +4585,9 @@ LH.add("parent.setTopInIframe()");
 	<script type="text/javascript">
 	function submitBoard(){
 		var mysubmit = new Mysubmit();
-		//var bodyInIframe = window.frames['se2_iframe'].document.body;
 		mysubmit.init("/board/insertBoard");
 		mysubmit.getValueById("subject","title");
-		mysubmit.getValueById("subject","content");
-		//mysubmit.getValueById("textform","content");
+		mysubmit.getValueByValue(oEditors.getById["textbox"].getIR(),"content");
 		mysubmit.getValueByValue("<sec:authentication property="name"/>","username");
 		mysubmit.frmSubmit();
 	}

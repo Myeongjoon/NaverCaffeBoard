@@ -1,9 +1,6 @@
 package com.navercorp.mjboard.auth.security;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -29,9 +26,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	/*
 	 * 
 	 * SHA 인코딩 방식 사용.
+	 * ㅉ
+	 * 
+	 * PasswordEncode 부분이 deprecated가 되었고, 이는 빠른 시일 안에 고치도록 하겠습니다.
 	 * 
 	 * 
-	 * 
+	 * SaltSorce : SHA 인코딩 방식에 사용되며, 객체의 클래스 정보를 가져와서, getter를 통해서 데이터를 받아오고, 같이 hashing을 해서 비밀번호를 암호화
 	 * 
 	 * */
 	
@@ -58,15 +58,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	
 	@Override
 	public Authentication authenticate(Authentication arg0) throws AuthenticationException {
-		User user = null;
+		User user = new User();
 		String username = arg0.getName();
 		String password = (String) arg0.getCredentials();
 		Collection<? extends GrantedAuthority> authorities = null;
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("username", username);
-		map.put("password", password);
+		user.setUsername(username);
+		user.setPassword(password);
 		try {
-			user = loginService.selectByID(map);
+			user = loginService.selectByID(user);
 			String hashedPassword = passwordEncoder.encodePassword(password, saltSource.getSalt(user));
 			if (!hashedPassword.equals(user.getPassword())) {
 				throw new BadCredentialsException("invaild password");

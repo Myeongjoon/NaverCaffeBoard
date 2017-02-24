@@ -18,6 +18,19 @@ public class LoginService {
 	
 	Logger logger = LoggerFactory.getLogger(LoginService.class);
 	
+	/*
+	 * 
+	 * SHA 인코딩 방식 사용.
+	 * ㅉ
+	 * 
+	 * PasswordEncode 부분이 deprecated가 되었고, 이는 빠른 시일 안에 고치도록 하겠습니다.
+	 * 
+	 * 
+	 * SaltSorce : SHA 인코딩 방식에 사용되며, 객체의 클래스 정보를 가져와서, getter를 통해서 데이터를 받아오고, 같이 hashing을 해서 비밀번호를 암호화
+	 * 
+	 * */
+	
+	
     @Autowired 
     private PasswordEncoder passwordEncoder;
     
@@ -41,18 +54,9 @@ public class LoginService {
 		}
 	}
 	
-	public User selectByID(Map<String, Object> map) throws Exception {
-		System.out.println("selectById");
-		User user = new User();
-		user.setUsername(map.get("username").toString());
-		user.setPassword(map.get("password").toString());
+	public User selectByID(User user) throws Exception {
 		List<User> list = loginDAO.selectByID(user);
-		if(list.size()>0){
-			return list.get(0);
-		}else{
-			System.out.println("no user");
-			return null;
-		}
+		return list.size() == 0 ? null : list.get(0);
 	}
 	
 	public User getPasswordEncodedUser(User user) {

@@ -4159,7 +4159,7 @@ function updateMoveMenu() {
 				<div id="front-cafe"
 					style="cursor: hand; cursor: pointer; background-image: none; width: 956px">
 					<a name="myCafeUrlLink" onclick="updateMoveMenu()"
-						href="/MyCafeIntro.nhn?clubid=25158488" target="cafe_main"> <img
+						href="/board/cafeMain?page=1" target="cafe_main"> <img
 						src="http://cafefiles.naver.net/20160613_194/25158488_1465803393494_fUQS2c_gif/25158488_user_163633.gif"
 						alt="취업대학교#공기업,인턴,NCS,승무원,알바이력서,자기소개서,토익"
 						onload="resizeTopSkin(this)">

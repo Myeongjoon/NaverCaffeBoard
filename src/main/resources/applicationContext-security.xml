@@ -33,7 +33,7 @@
 		<intercept-url pattern="/board/**" access="isAuthenticated()" />
 		<csrf disabled="true"/>
 		<headers>
-        	<frame-options policy="SAMEORIGIN"/>
+        	<frame-options disabled="true"></frame-options>
     	</headers>
 	</http>
 	<authentication-manager>

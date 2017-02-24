@@ -25,13 +25,49 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 
+	
+	/*
+	 * 
+	 * 
+	 * 메인 리스트
+	 * 
+	 * 
+	 * */
+	
+	
 	@RequestMapping(value = "/board/openBoardList")
 	public String openBoardList() throws Exception {
 		return "/cafe/cafeboardList";
 	}
 
+	/*
+	 * 
+	 * 
+	 * 글쓰기 페이지
+	 * 
+	 * 
+	 * */
+	
+	
 	@RequestMapping(value = "/board/cafeWrite")
 	public String openCafeWrite() throws Exception {
+		return "/cafe/cafeWrite";
+	}
+	
+	/*
+	 * 
+	 * 
+	 * 수정 페이지
+	 * 
+	 * 
+	 * */
+	
+	@RequestMapping(value = "/board/UpdateBoard")
+	public String openUpdateBoard(@RequestParam(value = "boardNo", required = true) String boardNo
+			,Model model) throws Exception {
+		BoardDetail boardDetail = boardService.selectBoardDetailByBoard_no(boardNo);
+		urlDecoder.decodeBoardDetail(boardDetail);
+		model.addAttribute("boardDetail", boardDetail);
 		return "/cafe/cafeWrite";
 	}
 
@@ -94,6 +130,31 @@ public class BoardController {
 	@RequestMapping(value = "/board/insertBoard")
 	public String insertBoard(BoardDetail boardDetail) throws Exception {
 		boardService.insertBoard(boardDetail);
+		return "redirect:/board/cafeMain?page=1";
+	}
+	
+	@RequestMapping(value = "/board/updateBoardDetail")
+	public String updateBoardDetail(BoardDetail boardDetail) throws Exception {
+		boardService.updateBoard(boardDetail);
+		return "redirect:/board/cafeMain?page=1";
+	}
+	
+	
+	
+	
+	
+	/*
+	 * 
+	 * 
+	 * 게시물 삭제
+	 * 
+	 * 
+	 * */
+	
+	
+	@RequestMapping(value = "/board/deleteBoard")
+	public String deleteBoard(@RequestParam(value = "boardNo", required = true) String boardNo) throws Exception {
+		boardService.deleteBoard(boardNo);
 		return "redirect:/board/cafeMain?page=1";
 	}
 }

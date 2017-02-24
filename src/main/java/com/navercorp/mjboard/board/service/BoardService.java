@@ -40,14 +40,16 @@ public class BoardService {
 	
 	/*
 	 *맨 아래에 페이징될 넘버의 개수를 리턴해 주는 부분 
-	 *
+	 *totalBoardNumber : 총 문서의 개수
+	 *pageBoardNumber : 현재 페이지까지 그려진 페이지의 개수, 1페이지 ->0, 2페이지 -> 0 ,..., 11페이지 -> 100,
+	 *remain : 앞으로 그려야할 페이지의 개수 -> 현재 페이지에서 그려야할 보드의 개수 -> 현재 페이지에서 그려야할 페이지 넘버의 개수
 	 * 
 	 * */
 	public int selectPageNumber(int page) {
 		int totalBoardNumber = boardDAO.selectTotalBoard();
 		int pageBoardNumber = (((page-1)/10))*100;
 		int remain = totalBoardNumber-pageBoardNumber;
-		int remainTo10 = remain%100;
-		return remainTo10 == 0 ? 0 : ((remainTo10-1)/10)+1;
+		remain = remain >= 100 ? 100 : remain;
+		return remain == 0 ? 0 : ((remain-1)/10)+1;
 	}
 }
