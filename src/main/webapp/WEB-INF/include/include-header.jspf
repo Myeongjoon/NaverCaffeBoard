@@ -11,3 +11,4 @@
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="<c:url value='/resources/js/common.js'/>" charset="utf-8"></script>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>

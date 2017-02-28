@@ -1,5 +1,8 @@
 eclipse.preferences.version=1
-encoding//src/main/webapp/WEB-INF/views/board/boardList.jsp=UTF-8
-encoding//src/main/webapp/WEB-INF/views/cafe/cafeMain.jsp=UTF-8
-encoding//src/main/webapp/WEB-INF/views/cafe/cafeWrite.jsp=UTF-8
+encoding//src/main/java=utf-8
+encoding//src/main/resources=utf-8
+encoding//src/main/webapp/WEB-INF/views/board/cafeMain.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/board/cafeWrite.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/login/signup.jsp=UTF-8
+encoding//src/test/resources=utf-8
+encoding/<project>=utf-8

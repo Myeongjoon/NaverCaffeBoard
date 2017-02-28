@@ -8,12 +8,11 @@
 	<enableImports><![CDATA[true]]></enableImports>
 	<configs>
 		<config>src/main/resources/applicationContext.xml</config>
-		<config>src/main/resources/applicationContext-mapper.xml</config>
-		<config>src/main/resources/applicationContext-datasource.xml</config>
 		<config>src/main/resources/applicationContext-security.xml</config>
 		<config>src/main/resources/mybatis_config.xml</config>
 	</configs>
 	<autoconfigs>
+		<config>src/main/resources/action-servlet.xml</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

@@ -11,20 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.navercorp.mjboard.board.model.BoardDetail;
+import com.navercorp.mjboard.board.model.Comment;
 import com.navercorp.mjboard.board.service.BoardService;
-import com.navercorp.mjboard.web.service.CustomURLDecoder;
+import com.navercorp.mjboard.board.service.CommentService;
 
 @Controller
 public class BoardController {
 	
 	Logger logger = LoggerFactory.getLogger(BoardController.class);
-	
-	@Autowired
-	private CustomURLDecoder urlDecoder;
+
 
 	@Autowired
 	private BoardService boardService;
 
+	
+	@Autowired
+	private CommentService commentService;
 	
 	/*
 	 * 
@@ -37,7 +39,7 @@ public class BoardController {
 	
 	@RequestMapping(value = "/board/openBoardList")
 	public String openBoardList() throws Exception {
-		return "/cafe/cafeboardList";
+		return "/board/cafeboardList";
 	}
 
 	/*
@@ -51,7 +53,7 @@ public class BoardController {
 	
 	@RequestMapping(value = "/board/cafeWrite")
 	public String openCafeWrite() throws Exception {
-		return "/cafe/cafeWrite";
+		return "/board/cafeWrite";
 	}
 	
 	/*
@@ -66,9 +68,8 @@ public class BoardController {
 	public String openUpdateBoard(@RequestParam(value = "boardNo", required = true) String boardNo
 			,Model model) throws Exception {
 		BoardDetail boardDetail = boardService.selectBoardDetailByBoard_no(boardNo);
-		urlDecoder.decodeBoardDetail(boardDetail);
 		model.addAttribute("boardDetail", boardDetail);
-		return "/cafe/cafeWrite";
+		return "/board/cafeWrite";
 	}
 
 	
@@ -88,13 +89,12 @@ public class BoardController {
 			@RequestParam(value = "page", required = true) int page
 			,Model model) throws Exception {
 		List<BoardDetail> list = boardService.selectBoardList(page);
-		urlDecoder.decodeBoardDetailList(list);
 		int pageNum = boardService.selectPageNumber(page);
 		model.addAttribute("currentPage : "+page);
 		model.addAttribute("currentPageTen : "+(page/10)*10);
 		model.addAttribute("pageNum",pageNum);
 		model.addAttribute("list", list);
-		return "/cafe/cafeMain";
+		return "/board/cafeMain";
 	}
 
 	
@@ -112,9 +112,10 @@ public class BoardController {
 	public String openCafeMainDetail(@RequestParam(value = "boardNo", required = true) String boardNo
 									,Model model) throws Exception {
 		BoardDetail boardDetail = boardService.selectBoardDetailByBoard_no(boardNo);
-		urlDecoder.decodeBoardDetail(boardDetail);
+		List<Comment> comments = commentService.selectCommentsList(boardNo);
 		model.addAttribute("boardDetail", boardDetail);
-		return "/cafe/cafeMainDetail";
+		model.addAttribute("comments", comments);
+		return "/board/cafeMainDetail";
 	}
 
 	

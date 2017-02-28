@@ -9,9 +9,9 @@ import com.navercorp.mjboard.board.model.BoardDetail;
 @Repository
 public interface BoardDAO {
 	
-	public List<BoardDetail> selectBoardList(int number);
+	public List<BoardDetail> selectBoardList(Integer number);
 	
-	public int selectTotalBoard();
+	public Integer selectTotalBoard();
 
 	public void insertBoard(BoardDetail boardDetail);
 

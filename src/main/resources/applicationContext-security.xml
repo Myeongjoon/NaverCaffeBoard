@@ -6,14 +6,10 @@
                     http://www.springframework.org/schema/security 
                     http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 	<beans:bean id="encoder"
-		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 	<beans:bean id="userService" class="com.navercorp.mjboard.auth.service.UserService" />
 	<beans:bean id="customAuthenticationProvider"
 		class="com.navercorp.mjboard.auth.security.CustomAuthenticationProvider" />
-	<beans:bean id="saltSource"
-		class="org.springframework.security.authentication.dao.ReflectionSaltSource">
-		<beans:property name="userPropertyToUse" value="username" />
-	</beans:bean>
 	<!-- 
 		
 		http 태그 : spring security 옵션들
@@ -28,8 +24,8 @@
 	<http use-expressions="true">
 		<logout logout-url="/logout" logout-success-url="/login" />
 		<form-login login-page="/login/" login-processing-url="/spring_security_check"
-			authentication-failure-url="/board/openBoardList"
-			default-target-url="/board/openBoardList" always-use-default-target="true" />
+			authentication-failure-url="/board/cafeMain?page=1"
+			default-target-url="/board/cafeMain?page=1" always-use-default-target="true" />
 		<intercept-url pattern="/board/**" access="isAuthenticated()" />
 		<csrf disabled="true"/>
 		<headers>
@@ -41,7 +37,6 @@
 		</authentication-provider>
 		<authentication-provider user-service-ref="userService">
 			<password-encoder ref="encoder">
-				<salt-source ref="saltSource" />
 			</password-encoder>
 		</authentication-provider>
 	</authentication-manager>

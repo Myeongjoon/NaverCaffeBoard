@@ -1,6 +1,7 @@
 function Mysubmit() {
 	var frm;
 	this.init=function init(URI){
+		document.charset="UTF-8";
 		this.frm = document.createElement("form");
 		this.frm.setAttribute("method", "POST");
 		this.frm.acceptCharset="UTF-8";
@@ -20,8 +21,7 @@ function Mysubmit() {
 		var inputElement = document.createElement("input");
 		inputElement.setAttribute("type", "hidden");
 		inputElement.setAttribute("name", name);
-		var encodedValue = encodeURIComponent(selectedValue);
-		inputElement.setAttribute("value", encodedValue);
+		inputElement.setAttribute("value", selectedValue);
 		this.frm.appendChild(inputElement);
 	}
 	
@@ -30,8 +30,7 @@ function Mysubmit() {
 		var inputElement = document.createElement("input");
 		inputElement.setAttribute("type", "hidden");
 		inputElement.setAttribute("name", name);
-		var encodedValue = encodeURIComponent(selectedValue);
-		inputElement.setAttribute("value", encodedValue);
+		inputElement.setAttribute("value", selectedValue);
 		this.frm.appendChild(inputElement);
 	}
 	this.frmSubmit = function frmSubmit(){

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.navercorp.mjboard.board.dao.CommentDAO">
+
+	<resultMap type="cmt" id="cmtResultMap">
+		<id property="boardNo" column="board_no" />
+		<result property="commentNo" column="comments_no" />
+		<result property="userId" column="user_id" />
+		<result property="userName" column="user_name" />
+	</resultMap>
+
+	<select id="selectCommentsList" resultMap="cmtResultMap"
+		parameterType="string">
+		SELECT
+		*
+		FROM
+		comments
+		WHERE
+		board_no=#{board_no}
+	</select>
+
+	<insert id="insertComment" parameterType="cmt">
+		INSERT
+		INTO
+		comments(
+		board_no
+		,comments_no
+		,content
+		,user_name
+		,user_id
+		)
+		VALUES(
+		#{boardNo}
+		,default
+		,#{content}
+		,#{userName}
+		,#{userId}
+		)
+	</insert>
+	<delete id="deleteComment" parameterType="cmt">
+		DELETE
+		FROM
+		comments
+		WHERE
+		board_no = #{boardNo} and comments_no = #{commentNo}
+	</delete>
+
+</mapper>

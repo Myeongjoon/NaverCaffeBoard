@@ -9,7 +9,6 @@
 	</context:component-scan>
 	
 	<import resource="applicationContext-datasource.xml" />
-	<import resource="applicationContext-mapper.xml" />
 	<import resource="applicationContext-security.xml" />
 	
 </beans>

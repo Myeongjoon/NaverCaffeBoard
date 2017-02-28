@@ -46,7 +46,7 @@ public class BoardService {
 	 * 
 	 * */
 	public int selectPageNumber(int page) {
-		int totalBoardNumber = boardDAO.selectTotalBoard();
+		Integer totalBoardNumber = boardDAO.selectTotalBoard();
 		int pageBoardNumber = (((page-1)/10))*100;
 		int remain = totalBoardNumber-pageBoardNumber;
 		remain = remain >= 100 ? 100 : remain;

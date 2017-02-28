@@ -9,9 +9,7 @@ import com.navercorp.mjboard.auth.model.User;
 @Repository
 public interface LoginDAO {
 	
-	public List<User> selectByID(User user);
+	public List<User> selectByID(String id);
 
 	public void insertUser(User user);
-
-	public void insertRole(User user);
 }

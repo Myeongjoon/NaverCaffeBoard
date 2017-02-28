@@ -15,6 +15,6 @@ public class BoardDetail {
 	private String title;
 	private String regDate;
 	private String regId;
+	private String regUsername;
 	private String content;
-	private String username;
 }

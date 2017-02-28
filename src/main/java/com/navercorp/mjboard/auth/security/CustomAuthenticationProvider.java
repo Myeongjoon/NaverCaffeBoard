@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.SaltSource;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,13 +24,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	
 	/*
 	 * 
-	 * SHA 인코딩 방식 사용.
-	 * ㅉ
-	 * 
-	 * PasswordEncode 부분이 deprecated가 되었고, 이는 빠른 시일 안에 고치도록 하겠습니다.
-	 * 
-	 * 
-	 * SaltSorce : SHA 인코딩 방식에 사용되며, 객체의 클래스 정보를 가져와서, getter를 통해서 데이터를 받아오고, 같이 hashing을 해서 비밀번호를 암호화
 	 * 
 	 * */
 	
@@ -42,8 +34,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private SaltSource saltSource;
 	
 	
 	/*
@@ -59,15 +49,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication arg0) throws AuthenticationException {
 		User user = new User();
-		String username = arg0.getName();
+		String id = (String)arg0.getName();
 		String password = (String) arg0.getCredentials();
 		Collection<? extends GrantedAuthority> authorities = null;
-		user.setUsername(username);
+		user.setId(id);
 		user.setPassword(password);
 		try {
-			user = loginService.selectByID(user);
-			String hashedPassword = passwordEncoder.encodePassword(password, saltSource.getSalt(user));
-			if (!hashedPassword.equals(user.getPassword())) {
+			user = loginService.selectByID(user.getId());
+			if (!passwordEncoder.matches(password, user.getPassword())) {
 				throw new BadCredentialsException("invaild password");
 			}
 			authorities = user.getAuthorities();
