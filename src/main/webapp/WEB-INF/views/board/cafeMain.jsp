@@ -30,9 +30,35 @@
 	type="text/css">
 </head>
 <body>
-	<div id="main-area" class="fl">
+	<div id="group-area" class="fl">
+		<div id="cafe-menu">
+			<ul class="cafe-menu-list">
+				<li><a href="/board/cafeMain?page=1" class="gm-tcol-c">전체글보기</a></li>
+				<!-- 카테고리 -->
+				<c:choose>
+					<c:when test="${fn:length(categorys) > 0}">
+						<c:forEach items="${categorys}" var="ctr">
+							<li><a href="/board/cafeMain?page=1&amp;category=${ctr.id}"
+								class="gm-tcol-c">${ctr.name}</a></li>
+						</c:forEach>
+					</c:when>
+				</c:choose>
+				<!-- /카테고리 -->
+			</ul>
+		</div>
+	</div>
+	<div id="main-area" class="fr">
 		<div id="sub-tit">
-			<h3 class="sub-tit-color only-tit">전체글보기</h3>
+			<!-- 카테고리 이름 -->
+			<c:choose>
+				<c:when test="${fn:length(categoryName) > 0}">
+					<h3 class="sub-tit-color only-tit">${categoryName}</h3>
+				</c:when>
+				<c:otherwise>
+					<h3 class="sub-tit-color only-tit">전체글보기</h3>
+				</c:otherwise>
+			</c:choose>
+			<!-- /카테고리 이름 -->
 		</div>
 		<div class="article-board zindex6 m-tcol-c" id="upperArticleList">
 			<table cellspacing="0" cellpadding="0" border="0" class="board-box">
@@ -51,7 +77,6 @@
 					<td class="p11">작성자<span style="padding: 0 52px 0 0;"></span></td>
 					<td class="p11">작성일</td>
 					<td class="p11">조회</td>
-					<td class="p11">좋아요</td>
 				</tr>
 			</table>
 		</div>
@@ -74,12 +99,13 @@
 									</td>
 									<td align="left" class="board-list"><span> <span
 											class="aaa"> <a
-												href="/board/cafeMainDetail?boardNo=${row.boardNo}"
-												onclick="return dynamicParamLink('/ArticleRead.nhn?clubid=25158488&amp;page=1&amp;boardtype=L&articleid=929693&referrerAllArticles=true', event);"
-												onmouseover="" class="m-tcol-c">${row.title }</a> <input
-												type="text" class="list-i-img" readonly="readonly"
-												title="사진"> <input type="text" class="list-i-new"
-												readonly="readonly" title="new">
+												href="/board/cafeMainDetail?boardNo=${row.boardNo}&amp;boardQueue=${row.boardQueue}"
+												class="m-tcol-c"> <c:choose>
+														<c:when test="${row.boardQueue!='0'}">
+															<span class="ico-q m-tcol-p">Re:</span>
+														</c:when>
+													</c:choose> ${row.title }
+											</a>
 										</span>
 									</span></td>
 									<td align="left">
@@ -92,21 +118,13 @@
 													<td class="pc"><img
 														src="http://cafeimgs.naver.net/cafe4/hidden.gif"
 														width="13" height="13" alt="" class="p-none"></td>
-													<td class="p-nick"><span>${row.regUsername }<img
-															src='http://cafeimgs.naver.net/levelicon/1/1_1.gif'
-															width='11' height='11' alt='' class='mem-level'></span></td>
+													<td class="p-nick"><span>${row.regUsername }</span></td>
 												</tr>
 											</table>
 										</div>
 									</td>
 									<td class="view-count m-tcol-c">${row.regDate }</td>
 									<td class="view-count m-tcol-c _rosReadcount">${row.hitCnt }</td>
-									<td class="view-count m-tcol-c">
-										<div class="u_likeit_list_module _reactionModule">
-											<span class="u_likeit_list_btn _button"><em
-												class="u_cnt _count">0</em></span>
-										</div>
-									</td>
 								</tr>
 								<tr>
 									<td colspan="6" class="board-line"></td>
@@ -142,6 +160,12 @@
 				</tr>
 			</table>
 		</div>
+		<p>
+			<strong><a href="/board/cafeWrite" class="m-tcol-c b"
+				onclick="clickcr(this,'abt.wrtlist', '', '', event);"><img
+					src="http://cafeimgs.naver.net/cafe4/ico-btn-write.gif" width="10"
+					height="10" alt="">글쓰기</a></strong>
+		</p>
 	</div>
 </body>
 </html>

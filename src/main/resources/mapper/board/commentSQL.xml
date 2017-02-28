@@ -11,13 +11,14 @@
 	</resultMap>
 
 	<select id="selectCommentsList" resultMap="cmtResultMap"
-		parameterType="string">
+		parameterType="boardDtl">
 		SELECT
 		*
 		FROM
 		comments
 		WHERE
-		board_no=#{board_no}
+		board_no=#{boardNo} and
+		board_queue=#{boardQueue}
 	</select>
 
 	<insert id="insertComment" parameterType="cmt">
@@ -28,7 +29,8 @@
 		,comments_no
 		,content
 		,user_name
-		,user_id
+		,user_id,
+		board_queue
 		)
 		VALUES(
 		#{boardNo}
@@ -36,6 +38,7 @@
 		,#{content}
 		,#{userName}
 		,#{userId}
+		,#{boardQueue}
 		)
 	</insert>
 	<delete id="deleteComment" parameterType="cmt">
@@ -43,7 +46,7 @@
 		FROM
 		comments
 		WHERE
-		board_no = #{boardNo} and comments_no = #{commentNo}
+		board_no = #{boardNo} and comments_no = #{commentNo} and
+		board_queue = #{boardQueue}
 	</delete>
-
 </mapper>

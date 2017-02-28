@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.navercorp.mjboard.board.dao.BoardDAO;
 import com.navercorp.mjboard.board.model.BoardDetail;
+import com.navercorp.mjboard.board.model.Category;
 
 @Service
 public class BoardService {
@@ -16,28 +17,32 @@ public class BoardService {
     @Autowired
     private BoardDAO boardDAO;
 
-	public void updateBoard(BoardDetail boardDetail) throws Exception {
+	public void updateBoard(BoardDetail boardDetail){
 		boardDAO.updateBoard(boardDetail);
 	}
 
-	public void deleteBoard(String board_no) throws Exception {
+	public void deleteBoard(String board_no){
 		boardDAO.deleteBoard(board_no);
 	}
 	
-	public List<BoardDetail> selectBoardList(int page) throws Exception {
-		return boardDAO.selectBoardList((page-1)*10);
+	public List<BoardDetail> selectBoardList(int page,String categoryNum){
+		Category category = new Category((page-1)*10,categoryNum);
+		return boardDAO.selectBoardList(category);
 	}
 
-	public BoardDetail selectBoardDetailByBoard_no(String board_no) throws Exception {
-		boardDAO.updateHitCnt(board_no);
-	    return boardDAO.selectBoardDetail(board_no);
+	public BoardDetail selectBoardDetailByBoard_no(String boardNo,String boardQueue){
+		BoardDetail boardDetail = new BoardDetail(boardNo,boardQueue);
+		boardDAO.updateHitCnt(boardDetail);
+	    return boardDAO.selectBoardDetail(boardDetail);
 	}
 	
-	public void insertBoard(BoardDetail boardDetail) throws Exception {
+	public void insertBoard(BoardDetail boardDetail){
 		boardDAO.insertBoard(boardDetail);
 	}
 
-	
+	public String selectBoardQueueNumber(String boardNo){
+		return boardNo==null ? null : boardDAO.selectBoardQueueNumber(Integer.parseInt(boardNo));
+	}
 	/*
 	 *맨 아래에 페이징될 넘버의 개수를 리턴해 주는 부분 
 	 *totalBoardNumber : 총 문서의 개수
@@ -45,8 +50,8 @@ public class BoardService {
 	 *remain : 앞으로 그려야할 페이지의 개수 -> 현재 페이지에서 그려야할 보드의 개수 -> 현재 페이지에서 그려야할 페이지 넘버의 개수
 	 * 
 	 * */
-	public int selectPageNumber(int page) {
-		Integer totalBoardNumber = boardDAO.selectTotalBoard();
+	public int selectPageNumber(int page,String category) {
+		Integer totalBoardNumber = boardDAO.selectTotalBoard(new Category(page,category));
 		int pageBoardNumber = (((page-1)/10))*100;
 		int remain = totalBoardNumber-pageBoardNumber;
 		remain = remain >= 100 ? 100 : remain;

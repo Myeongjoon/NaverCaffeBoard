@@ -58,7 +58,15 @@
 						<div>
 							<select name="menuid" class="step01" style="width: 156px;"
 								id="boardCategory">
-								<option value="-1">전체글</option>
+								<!-- 카테고리 -->
+								<c:choose>
+									<c:when test="${fn:length(categorys) > 0}">
+										<c:forEach items="${categorys}" var="ctr">
+											<option value="${ctr.id}">${ctr.name}</option>
+										</c:forEach>
+									</c:when>
+								</c:choose>
+								<!-- /카테고리 -->
 							</select>
 						</div></li>
 					<li class="post_subject"><label class="item" for="subject">제목</label>
@@ -108,12 +116,23 @@
 			var mysubmit = new Mysubmit();
 			mysubmit.init("/board/insertBoard");
 			mysubmit.getValueById("subject", "title");
+			mysubmit.getValueById("boardCategory", "category");
 			mysubmit.getValueByValue(oEditors.getById["textbox"].getIR(),
 					"content");
 			mysubmit.getValueByValue("<sec:authentication property="name"/>",
 					"regUsername");
 			mysubmit.getValueByValue("<sec:authentication property="principal.id"/>",
 					"regId");
+			<c:choose>
+				<c:when test="${fn:length(boardNo) > 0}">
+					mysubmit.getValueByValue("${boardNo}","boardNo");
+				</c:when>
+			</c:choose>
+			<c:choose>
+				<c:when test="${fn:length(boardQueue) > 0}">
+					mysubmit.getValueByValue("${boardQueue}","boardQueue");
+				</c:when>
+			</c:choose>
 			mysubmit.frmSubmit();
 		}
 	</script>

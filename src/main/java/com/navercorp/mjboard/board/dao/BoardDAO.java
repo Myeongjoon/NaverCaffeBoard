@@ -5,21 +5,25 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.navercorp.mjboard.board.model.BoardDetail;
+import com.navercorp.mjboard.board.model.Category;
 
 @Repository
 public interface BoardDAO {
-	
-	public List<BoardDetail> selectBoardList(Integer number);
-	
-	public Integer selectTotalBoard();
+
+	public List<BoardDetail> selectBoardList(Category category);
+
+	public Integer selectTotalBoard(Category category);
 
 	public void insertBoard(BoardDetail boardDetail);
 
-	public void updateHitCnt(String board_no);
-	 
-	public BoardDetail selectBoardDetail(String board_no);
-	
+	public void updateHitCnt(BoardDetail boardDetail);
+
+	public BoardDetail selectBoardDetail(BoardDetail boardDetail);
+
 	public void updateBoard(BoardDetail boardDetail);
 
 	public void deleteBoard(String board_no);
+
+	public String selectBoardQueueNumber(Integer boardNo);
+
 }

@@ -15,4 +15,5 @@ public class Comment {
 	private String content;
 	private String userId;
 	private String userName;
+	private String boardQueue;
 }

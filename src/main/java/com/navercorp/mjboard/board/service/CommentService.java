@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.navercorp.mjboard.board.dao.CommentDAO;
+import com.navercorp.mjboard.board.model.BoardDetail;
 import com.navercorp.mjboard.board.model.Comment;
 
 @Service
@@ -16,8 +17,8 @@ public class CommentService {
     @Autowired
     private CommentDAO commentsDAO;
 
-    public List<Comment> selectCommentsList(String board_no) throws Exception {
-		return commentsDAO.selectCommentsList(board_no);
+    public List<Comment> selectCommentsList(BoardDetail boardDetail) throws Exception {
+		return commentsDAO.selectCommentsList(boardDetail);
 	}
     
     public void  insertComment(Comment comment){
@@ -27,4 +28,5 @@ public class CommentService {
     public void deleteComment(Comment comment){
     	commentsDAO.deleteComment(comment);
     }
+
 }

@@ -17,4 +17,15 @@ public class BoardDetail {
 	private String regId;
 	private String regUsername;
 	private String content;
+	private String category;
+	private String boardQueue;
+
+	public BoardDetail() {
+
+	}
+
+	public BoardDetail(String boardNo, String boardQueue) {
+		this.boardNo = boardNo;
+		this.boardQueue = boardQueue;
+	}
 }

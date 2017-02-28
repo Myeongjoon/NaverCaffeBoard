@@ -57,6 +57,8 @@
 									<tbody>
 										<tr valign="top">
 											<td><span class="b m-tcol-c">${boardDetail.title}</span></td>
+											<td class="m-tcol-c filter-30">|</td>
+											<td class="m-tcol-c">${categoryName }</td>
 										</tr>
 									</tbody>
 								</table>
@@ -120,6 +122,7 @@
 						<div class="box-reply2 bg-color u_cbox" id="TKgjN"
 							style="display: block;">
 							<ul class="cmlist" id="cmt_list">
+								<sec:authentication var="principal" property="principal" />
 								<c:choose>
 									<c:when test="${fn:length(comments) > 0}">
 										<c:forEach items="${comments}" var="cmt">
@@ -136,7 +139,6 @@
 																</tbody>
 															</table>
 														</div>
-														<sec:authentication var="principal" property="principal" />
 														<!-- 삭제 버튼 -->
 														<c:choose>
 															<c:when test="${cmt.userId eq principal.id}">
@@ -197,11 +199,19 @@
 					<div class="fr">
 
 						<div id="writeFormBtn" class="btn _rosRestrict">
+							<span></span>
 							<p>
-								<strong><a href="/board/cafeWrite" class="m-tcol-c b"
-									onclick="clickcr(this,'abt.wrtlist', '', '', event);"><img
+								<strong><a href="/board/cafeWrite" class="m-tcol-c b"><img
 										src="http://cafeimgs.naver.net/cafe4/ico-btn-write.gif"
 										width="10" height="10" alt="">글쓰기</a></strong>
+							</p>
+						</div>
+						<div id="replyFormBtn" class="btn _rosRestrict">
+							<span></span>
+							<p>
+								<a href="/board/cafeWrite?boardNo=${boardDetail.boardNo}" class="m-tcol-c"><img
+									src="http://cafeimgs.naver.net/cafe4/ico-btn-check.gif"
+									width="9" height="8" alt="">답글</a>
 							</p>
 						</div>
 						<c:choose>
@@ -209,16 +219,14 @@
 								<div id="modifyFormBtn" class="btn _rosRestrict">
 									<span></span>
 									<p>
-										<a
-											href="http://10.110.242.87/board/UpdateBoard?boardNo=${boardDetail.boardNo }"
+										<a href="/board/UpdateBoard?boardNo=${boardDetail.boardNo }"
 											class="m-tcol-c">수정</a>
 									</p>
 								</div>
 								<div class="btn _rosRestrict">
 									<span></span>
 									<p>
-										<a
-											href="http://10.110.242.87/board/deleteBoard?boardNo=${boardDetail.boardNo }"
+										<a href="/board/deleteBoard?boardNo=${boardDetail.boardNo }"
 											class="m-tcol-c">삭제</a>
 									</p>
 								</div>
@@ -229,8 +237,7 @@
 						<div class="btn" onclick="goList();">
 							<span></span>
 							<p>
-								<a href="http://10.110.242.87/board/cafeMain?page=1"
-									class="m-tcol-c">목록</a>
+								<a href="/board/cafeMain?page=1" class="m-tcol-c">목록</a>
 							</p>
 						</div>
 					</div>
@@ -254,6 +261,7 @@
 			mysubmit.getValueById("comment_text", "content");
 			mysubmit.getValueByValue("<sec:authentication property="principal.id"/>","userId");
 			mysubmit.getValueByValue("<sec:authentication property="name"/>","userName");
+			mysubmit.getValueByValue(${boardDetail.boardQueue},"boardQueue");
 			mysubmit.frmSubmit();
 		}
 		function deleteComment(commentNo){
@@ -261,6 +269,7 @@
 			mysubmit.init("/comment/deleteComment");
 			mysubmit.getValueByValue(${boardDetail.boardNo}, "boardNo");
 			mysubmit.getValueByValue(commentNo, "commentNo");
+			mysubmit.getValueByValue(${boardDetail.boardQueue}, "boardQueue");
 			mysubmit.frmSubmit();
 		} 
 	</script>

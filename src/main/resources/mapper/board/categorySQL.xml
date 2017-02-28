@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.navercorp.mjboard.board.dao.CategoryDAO">
+	
+	<select id="selectCategoryList" resultType="ctr">
+	       select * 
+	       from category
+	</select>
+	
+	<select id="selectCategoryName" parameterType="integer" resultType="string">
+	       select name
+	       from category
+	       where id=#{id}
+	</select>
+</mapper>
