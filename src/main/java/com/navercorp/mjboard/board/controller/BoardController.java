@@ -34,19 +34,6 @@ public class BoardController {
 	/*
 	 * 
 	 * 
-	 * 메인 리스트
-	 * 
-	 * 
-	 */
-
-	@RequestMapping(value = "/board/openBoardList")
-	public String openBoardList() throws Exception {
-		return "/board/cafeboardList";
-	}
-
-	/*
-	 * 
-	 * 
 	 * 글쓰기 페이지
 	 * 
 	 * 
@@ -54,16 +41,21 @@ public class BoardController {
 	 * 
 	 * 이때 해당 답글들의 맨 밑에 놓게 해야하므로, 최대 boardQueue를 가져와야 한다.
 	 * 
+	 * category가 있으면, 답글.
+	 * 
 	 */
 
 	@RequestMapping(value = "/board/cafeWrite")
-	public String openCafeWrite(@RequestParam(value = "boardNo", required = false) String boardNo, Model model)
-			throws Exception {
-		String boardQueue = boardService.selectBoardQueueNumber(boardNo);
+	public String openCafeWrite(@RequestParam(value = "boardNo", required = false) String boardNo,
+			@RequestParam(value = "category", required = false) String category,
+			@RequestParam(value = "boardQueue", required = false) String boardQueue,
+			Model model) throws Exception {
 		List<Category> categoryList = categoryService.selectCategoryList();
 		model.addAttribute("boardNo", boardNo);
-		model.addAttribute("boardQueue", boardQueue);
 		model.addAttribute("categorys", categoryList);
+		model.addAttribute("category", category);
+		boardQueue = boardService.selectBoardQueueNumber(boardNo);
+		model.addAttribute("boardQueue", boardQueue);
 		return "/board/cafeWrite";
 	}
 
@@ -77,11 +69,22 @@ public class BoardController {
 
 	@RequestMapping(value = "/board/UpdateBoard")
 	public String openUpdateBoard(@RequestParam(value = "boardNo", required = true) String boardNo,
-			@RequestParam(value = "boardQueue", required = true) String boardQueue,Model model)
-			throws Exception {
-		BoardDetail boardDetail = boardService.selectBoardDetailByBoard_no(boardNo,boardQueue);
+			@RequestParam(value = "boardQueue", required = true) String boardQueue, Model model) throws Exception {
+		BoardDetail boardDetail = boardService.selectBoardDetailByBoard_no(boardNo, boardQueue);
+		List<Category> categoryList = categoryService.selectCategoryList();
 		model.addAttribute("boardDetail", boardDetail);
+		model.addAttribute("boardNo",boardNo);
+		model.addAttribute("isUpdate", true);
+		model.addAttribute("category",boardDetail.getCategory());
+		model.addAttribute("categorys", categoryList);
+		model.addAttribute("boardQueue",boardQueue);
 		return "/board/cafeWrite";
+	}
+	
+	@RequestMapping(value = "/board/UpdateSelectedBoard")
+	public String updateBoardDetail(BoardDetail boardDetail) throws Exception {
+		boardService.updateBoard(boardDetail);
+		return "redirect:/board/cafeMain?page=1";
 	}
 
 	/*
@@ -98,11 +101,13 @@ public class BoardController {
 		List<BoardDetail> list = boardService.selectBoardList(page, category);
 		List<Category> categoryList = categoryService.selectCategoryList();
 		int pageNum = boardService.selectPageNumber(page, category);
+		boolean hasNext = boardService.hasNext(page,category);
 		String categoryName = categoryService.selectCategoryName(category);
+		model.addAttribute("hasNext", hasNext);
+		model.addAttribute("category", category);
 		model.addAttribute("categoryName", categoryName);
 		model.addAttribute("categorys", categoryList);
-		model.addAttribute("currentPage : " + page);
-		model.addAttribute("currentPageTen : " + (page / 10) * 10);
+		model.addAttribute("currentPage",page);
 		model.addAttribute("pageNum", pageNum);
 		model.addAttribute("list", list);
 		return "/board/cafeMain";
@@ -117,9 +122,8 @@ public class BoardController {
 
 	@RequestMapping(value = "/board/cafeMainDetail")
 	public String openCafeMainDetail(@RequestParam(value = "boardNo", required = true) String boardNo,
-			@RequestParam(value = "boardQueue", required = true) String boardQueue, Model model)
-			throws Exception {
-		BoardDetail boardDetail = boardService.selectBoardDetailByBoard_no(boardNo,boardQueue);
+			@RequestParam(value = "boardQueue", required = true) String boardQueue, Model model) throws Exception {
+		BoardDetail boardDetail = boardService.selectBoardDetailByBoard_no(boardNo, boardQueue);
 		List<Comment> comments = commentService.selectCommentsList(boardDetail);
 		String categoryName = categoryService.selectCategoryName(boardDetail.getCategory());
 		model.addAttribute("boardDetail", boardDetail);
@@ -139,12 +143,6 @@ public class BoardController {
 	@RequestMapping(value = "/board/insertBoard")
 	public String insertBoard(BoardDetail boardDetail) throws Exception {
 		boardService.insertBoard(boardDetail);
-		return "redirect:/board/cafeMain?page=1";
-	}
-
-	@RequestMapping(value = "/board/updateBoardDetail")
-	public String updateBoardDetail(BoardDetail boardDetail) throws Exception {
-		boardService.updateBoard(boardDetail);
 		return "redirect:/board/cafeMain?page=1";
 	}
 

@@ -139,6 +139,14 @@
 		<div class="prev-next">
 			<table summary="페이지 네비게이션" class="Nnavi" align="center">
 				<tr>
+					<c:choose>
+						<c:when test="${currentPage ne 1 }">
+							<td class="pgR"><a
+								href="/board/cafeMain?page=${currentPage-1}" class="m-tcol-c pn">
+									<span class="ico-bl ico">◀</span><span>이전</span>
+							</a></td>
+						</c:when>
+					</c:choose>
 					<c:forEach var="page" begin="1" end="${pageNum}" step="1">
 						<c:choose>
 							<c:when test="${currentPage eq page }">
@@ -154,17 +162,31 @@
 						</c:choose>
 						<td class="on">
 					</c:forEach>
-					<td class="pgR"><a href="/board/cafeMain"
-						onclick="return dynamicParamLink('/board/cafeMain', event)"
-						class="m-tcol-c pn"><span>다음</span><span class="ico-bl ico">▶</span></a></td>
+					<c:choose>
+						<c:when test="${hasNext eq true }">
+							<td class="pgR"><a
+						href="/board/cafeMain?page=${currentPage+1}" class="m-tcol-c pn"><span>다음</span><span
+							class="ico-bl ico">▶</span></a></td>
+						</c:when>
+					</c:choose>
+					
 				</tr>
 			</table>
 		</div>
 		<p>
-			<strong><a href="/board/cafeWrite" class="m-tcol-c b"
-				onclick="clickcr(this,'abt.wrtlist', '', '', event);"><img
-					src="http://cafeimgs.naver.net/cafe4/ico-btn-write.gif" width="10"
-					height="10" alt="">글쓰기</a></strong>
+			<c:choose>
+				<c:when test="${fn:length(category) > 0}">
+					<strong><a href="/board/cafeWrite?category=${category}"
+						class="m-tcol-c b"><img
+							src="http://cafeimgs.naver.net/cafe4/ico-btn-write.gif"
+							width="10" height="10" alt="">글쓰기</a></strong>
+				</c:when>
+				<c:otherwise>
+					<strong><a href="/board/cafeWrite?" class="m-tcol-c b"><img
+							src="http://cafeimgs.naver.net/cafe4/ico-btn-write.gif"
+							width="10" height="10" alt="">글쓰기</a></strong>
+				</c:otherwise>
+			</c:choose>
 		</p>
 	</div>
 </body>

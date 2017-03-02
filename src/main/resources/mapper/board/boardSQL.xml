@@ -15,8 +15,16 @@
 
 	<select id="selectBoardList" resultMap="boardDtlResultMap"
 		parameterType="ctr">
-		select *
-		from (select @i:=@i+1 AS iterator , t.*
+		select board_no
+		,title
+		,hit_cnt
+		,reg_date,
+		reg_id,
+		reg_username,
+		category,
+		board_queue
+		from (select @i:=@i+1 AS iterator ,
+		t.*
 		from
 		(SELECT
 		board_no
@@ -41,14 +49,15 @@
 	</select>
 
 	<select id="selectTotalBoard" resultType="integer"
-		parameterType="ctr">
+		parameterType="String">
 		SELECT
 		count(board_no)
 		FROM
 		board
 		WHERE
-		if(#{name} is null,
-		del_check='N',del_check='N' and category=#{name})
+		if(#{category} is
+		null,
+		del_check='N',del_check='N' and category=#{category})
 	</select>
 
 	<insert id="insertBoard" parameterType="boardDtl">
@@ -130,7 +139,8 @@
 		#{title}
 		,content = #{content}
 		WHERE
-		board_no = #{board_no}
+		board_no = #{boardNo} and
+		board_queue = #{boardQueue}
 	</update>
 
 	<update id="deleteBoard" parameterType="string">

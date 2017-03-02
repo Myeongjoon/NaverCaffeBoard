@@ -20,4 +20,8 @@ public class Category {
 		this.page = new Integer(page);
 		this.name=name;
 	}
+	
+	public Category(String name){
+		this.name=name;
+	}
 }

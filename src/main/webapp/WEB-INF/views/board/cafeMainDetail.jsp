@@ -209,7 +209,7 @@
 						<div id="replyFormBtn" class="btn _rosRestrict">
 							<span></span>
 							<p>
-								<a href="/board/cafeWrite?boardNo=${boardDetail.boardNo}" class="m-tcol-c"><img
+								<a href="/board/cafeWrite?boardNo=${boardDetail.boardNo}&category=${boardDetail.category}" class="m-tcol-c"><img
 									src="http://cafeimgs.naver.net/cafe4/ico-btn-check.gif"
 									width="9" height="8" alt="">답글</a>
 							</p>
@@ -219,7 +219,7 @@
 								<div id="modifyFormBtn" class="btn _rosRestrict">
 									<span></span>
 									<p>
-										<a href="/board/UpdateBoard?boardNo=${boardDetail.boardNo }"
+										<a href="/board/UpdateBoard?boardNo=${boardDetail.boardNo }&boardQueue=${boardDetail.boardQueue}"
 											class="m-tcol-c">수정</a>
 									</p>
 								</div>

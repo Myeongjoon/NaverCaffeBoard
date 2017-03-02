@@ -13,7 +13,7 @@
 	<select id="selectCommentsList" resultMap="cmtResultMap"
 		parameterType="boardDtl">
 		SELECT
-		*
+		content,user_name,user_id
 		FROM
 		comments
 		WHERE

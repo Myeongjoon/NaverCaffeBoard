@@ -9,9 +9,6 @@
 <meta http-equiv="X-UA-Compatible" content="requiresActiveX=true">
 <title>네이버 카페</title>
 <%@ include file="/WEB-INF/include/include-header.jspf"%>
-<%
-	request.setCharacterEncoding("UTF-8");
-%>
 <script
 	src="<c:url value='/resources/smarteditor/js/service/HuskyEZCreator.js'/>"
 	charset="utf-8"></script>
@@ -60,11 +57,18 @@
 								id="boardCategory">
 								<!-- 카테고리 -->
 								<c:choose>
-									<c:when test="${fn:length(categorys) > 0}">
-										<c:forEach items="${categorys}" var="ctr">
-											<option value="${ctr.id}">${ctr.name}</option>
-										</c:forEach>
+									<c:when test="${fn:length(category) > 0}">
+										<option value="${category}">${categorys[category-1].name}</option>
 									</c:when>
+									<c:otherwise>
+										<c:choose>
+											<c:when test="${fn:length(categorys) > 0}">
+												<c:forEach items="${categorys}" var="ctr">
+													<option value="${ctr.id}">${ctr.name}</option>
+												</c:forEach>
+											</c:when>
+										</c:choose>
+									</c:otherwise>
 								</c:choose>
 								<!-- /카테고리 -->
 							</select>
@@ -87,6 +91,8 @@
 								method="post" accept-charset="utf-8">
 								<textarea id="textbox" style="visibility: hidden" name="content"
 									cols="93" rows="28">
+									<c:if
+										test="${boardDetail.content != '' || boardDetail.contente ne null}">${boardDetail.content}</c:if>
 									</textarea>
 							</form>
 						</td>
@@ -114,7 +120,14 @@
 	<script type="text/javascript">
 		function submitBoard() {
 			var mysubmit = new Mysubmit();
-			mysubmit.init("/board/insertBoard");
+			<c:choose>
+				<c:when test="${isUpdate ne null && isUpdate eq true}">
+					mysubmit.init("/board/UpdateSelectedBoard");
+				</c:when>
+				<c:otherwise>
+					mysubmit.init("/board/insertBoard");
+				</c:otherwise>
+			</c:choose>
 			mysubmit.getValueById("subject", "title");
 			mysubmit.getValueById("boardCategory", "category");
 			mysubmit.getValueByValue(oEditors.getById["textbox"].getIR(),
