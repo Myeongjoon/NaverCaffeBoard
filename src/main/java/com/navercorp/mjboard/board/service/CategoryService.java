@@ -11,19 +11,16 @@ import com.navercorp.mjboard.board.model.Category;
 
 @Service
 public class CategoryService {
-    Logger log = Logger.getLogger(this.getClass());
-     
-    @Autowired
-    private CategoryDAO categoryDAO;
+	Logger log = Logger.getLogger(this.getClass());
 
-    public List<Category> selectCategoryList(){
+	@Autowired
+	private CategoryDAO categoryDAO;
+
+	public List<Category> selectCategoryList() {
 		return categoryDAO.selectCategoryList();
 	}
-    
-    public String selectCategoryName(String id){
-    	return id == null ? null : categoryDAO.selectCategoryName(Integer.parseInt(id));
-    }
-    
-    
-    
+
+	public String selectCategoryName(String id) {
+		return id == null || id == "" ? null : categoryDAO.selectCategoryName(Integer.parseInt(id));
+	}
 }

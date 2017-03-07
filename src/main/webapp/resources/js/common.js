@@ -23,6 +23,9 @@ function Mysubmit() {
 		inputElement.setAttribute("name", name);
 		inputElement.setAttribute("value", selectedValue);
 		this.frm.appendChild(inputElement);
+		if(selectedValue==""){
+			return false;
+		}
 	}
 	
 	this.getValueByValue = function getValueByValue(value,name){

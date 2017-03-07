@@ -4,9 +4,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.navercorp.mjboard.auth.model.User;
 import com.navercorp.mjboard.board.dao.BoardDAO;
+import com.navercorp.mjboard.board.model.Board;
 import com.navercorp.mjboard.board.model.BoardDetail;
 import com.navercorp.mjboard.board.model.Category;
 
@@ -17,24 +21,134 @@ public class BoardService {
 	@Autowired
 	private BoardDAO boardDAO;
 
-	public void updateBoard(BoardDetail boardDetail) {
-		boardDAO.updateBoard(boardDetail);
+	@Autowired
+	private CategoryService categoryService;
+
+	@Autowired
+	private CommentService commentService;
+
+	/*
+	 * 
+	 * 
+	 * 게시판 목록을 띄위주기 위한 객체를 리턴
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+
+	public Board createBoard(int page, String category) {
+		if (category == "") {
+			category = null;
+		}
+		Board board = new Board();
+		board.setHasNext(hasNext(page, category));
+		board.setPageNum(selectPageNumber(page, category));
+		board.setCategoryName(categoryService.selectCategoryName(category));
+		board.setCategoryList(categoryService.selectCategoryList());
+		board.setCategory(category);
+		board.setCurrentPage(page);
+		board.setList(selectBoardList(page, category));
+		return board;
 	}
 
-	public void deleteBoard(String board_no) {
-		boardDAO.deleteBoard(board_no);
+	/*
+	 * 
+	 * 세션과 게시판 소유자를 비교하여 일치하면 update
+	 * 
+	 * 
+	 */
+
+	public void updateBoard(BoardDetail boardDetail) {
+		boardDetail.setBoardNo(boardDetail.getBoardNo());
+		boardDetail.setBoardQueue(boardDetail.getBoardQueue());
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		String boardRegId = boardDAO.selectUserId(boardDetail);
+		if (user.getId().equals(boardRegId)) {
+			boardDAO.updateBoard(boardDetail);
+		}
+	}
+
+	/*
+	 * 
+	 * 세션과 게시판 소유자를 비교하여 일치하면 delete
+	 * 
+	 * 
+	 */
+
+	public void deleteBoard(String boardNo, String boardQueue) {
+		BoardDetail boardDetail = new BoardDetail();
+		boardDetail.setBoardNo(boardNo);
+		boardDetail.setBoardQueue(boardQueue);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		String boardRegId = boardDAO.selectUserId(boardDetail);
+		if (user.getId().equals(boardRegId)) {
+			boardDAO.deleteBoard(boardDetail);
+		}
 	}
 
 	public List<BoardDetail> selectBoardList(int page, String categoryNum) {
-		Category category = new Category((page - 1) * 10, categoryNum);
+		int numOfBoard = 10;
+		Category category = new Category((page - 1) * numOfBoard, categoryNum, numOfBoard);
 		return boardDAO.selectBoardList(category);
 	}
 
-	public BoardDetail selectBoardDetailByBoard_no(String boardNo, String boardQueue) {
+	/*
+	 * 
+	 * update 페이지에서 필요한 객체 리턴
+	 * 
+	 * 
+	 */
+
+	public BoardDetail selectBoardDetailByUpdateBoard(String boardNo, String boardQueue) throws Exception {
+		BoardDetail boardDetail = new BoardDetail(boardNo, boardQueue);
+		boardDetail = boardDAO.selectBoardDetail(boardDetail);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		String boardRegId = boardDAO.selectUserId(boardDetail);
+		if (user.getId().equals(boardRegId)) {
+			boardDetail.setComments(commentService.selectCommentsList(boardDetail));
+			boardDetail.setCategoryName(categoryService.selectCategoryName(boardDetail.getCategory()));
+			boardDetail.setUpdate(true);
+			boardDetail.setCategoryList(categoryService.selectCategoryList());
+			return boardDetail;
+		}
+		return null;
+	}
+
+	/*
+	 * 
+	 * 게시판을 만드는데의 최소의 board
+	 * 
+	 * 
+	 */
+
+	public BoardDetail createDefaultBoard(String boardNo, String category) throws Exception {
+		BoardDetail boardDetail = new BoardDetail();
+		boardDetail.setBoardNo(boardNo);
+		boardDetail.setBoardQueue(selectBoardQueueNumber(boardNo));
+		boardDetail.setCategory(category);
+		boardDetail.setCategoryList(categoryService.selectCategoryList());
+		return boardDetail;
+	}
+
+	public BoardDetail selectBoardDetail(String boardNo, String boardQueue) throws Exception {
 		BoardDetail boardDetail = new BoardDetail(boardNo, boardQueue);
 		boardDAO.updateHitCnt(boardDetail);
-		return boardDAO.selectBoardDetail(boardDetail);
+		boardDetail = boardDAO.selectBoardDetail(boardDetail);
+		boardDetail.setComments(commentService.selectCommentsList(boardDetail));
+		boardDetail.setCategoryName(categoryService.selectCategoryName(boardDetail.getCategory()));
+		return boardDetail;
 	}
+
+	/*
+	 * 
+	 * 유저가 없이, url에 접근은 하지 못하므로, 권한을 체크 하지는 않음.
+	 * 
+	 * 
+	 */
 
 	public void insertBoard(BoardDetail boardDetail) {
 		boardDAO.insertBoard(boardDetail);
@@ -57,6 +171,12 @@ public class BoardService {
 		remain = remain >= 100 ? 100 : remain;
 		return remain == 0 ? 0 : ((remain - 1) / 10) + 1;
 	}
+
+	/*
+	 * 
+	 * 다음 버튼 존재 유무 확인
+	 * 
+	 */
 
 	public boolean hasNext(Integer page, String category) {
 		Integer allBoardNum = selectAllBoardNum(category);

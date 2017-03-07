@@ -13,24 +13,12 @@
 		<result property="regUsername" column="reg_username" />
 	</resultMap>
 
-	<select id="selectBoardList" resultMap="boardDtlResultMap"
-		parameterType="ctr">
-		select board_no
-		,title
-		,hit_cnt
-		,reg_date,
-		reg_id,
-		reg_username,
-		category,
-		board_queue
-		from (select @i:=@i+1 AS iterator ,
-		t.*
-		from
-		(SELECT
-		board_no
-		,title
-		,hit_cnt
-		,reg_date,
+	<select id="selectBoardList" parameterType="ctr" resultMap="boardDtlResultMap">
+		SELECT
+		board_no,
+		title,
+		hit_cnt,
+		reg_date,
 		reg_id,
 		reg_username,
 		category,
@@ -42,14 +30,11 @@
 		del_check='N',del_check='N' and category=#{name})
 		ORDER BY
 		board_no
-		DESC,board_queue ASC ) as t,(SELECT @i:=0) AS foo) AS rowNumtbl
-		WHERE
-		rowNumtbl.iterator
-		BETWEEN #{page}+1 AND #{page}+10
+		DESC,board_queue ASC
+		LIMIT #{page} , #{offset}
 	</select>
 
-	<select id="selectTotalBoard" resultType="integer"
-		parameterType="String">
+	<select id="selectTotalBoard" parameterType="String" resultType="integer">
 		SELECT
 		count(board_no)
 		FROM
@@ -64,28 +49,28 @@
 		INSERT
 		INTO
 		board(
-		board_no
-		,title
-		,content
-		,hit_cnt
-		,del_check
-		,reg_date
-		,reg_id
-		,reg_username
-		,category
-		,board_queue
+		board_no,
+		title,
+		content,
+		hit_cnt,
+		del_check,
+		reg_date,
+		reg_id,
+		reg_username,
+		category,
+		board_queue
 		)
 		VALUES(
-		#{boardNo}
-		,#{title}
-		,#{content}
-		,0
-		,default
-		,now()
-		,#{regId}
-		,#{regUsername}
-		,#{category}
-		,if(#{boardQueue} is
+		#{boardNo},
+		#{title},
+		#{content},
+		0,
+		default,
+		now(),
+		#{regId},
+		#{regUsername},
+		#{category},
+		if(#{boardQueue} is
 		null,0,#{boardQueue})
 		)
 	</insert>
@@ -136,20 +121,31 @@
 		board
 		SET
 		title =
-		#{title}
-		,content = #{content}
+		#{title},
+		content = #{content}
 		WHERE
 		board_no = #{boardNo} and
 		board_queue = #{boardQueue}
 	</update>
 
-	<update id="deleteBoard" parameterType="string">
-		UPDATE
+	<delete id="deleteBoard" parameterType="boardDtl">
+		delete
+		from
 		board
-		SET
-		del_check =
-		'Y'
 		WHERE
-		board_no = #{board_no}
-	</update>
+		board_no
+		= #{boardNo} and
+		board_queue = #{boardQueue}
+	</delete>
+
+	<select id="selectUserId" parameterType="boardDtl" resultType="string">
+		select reg_id
+		from
+		board
+		WHERE
+		board_no
+		= #{boardNo} and
+		board_queue =
+		#{boardQueue}
+	</select>
 </mapper>

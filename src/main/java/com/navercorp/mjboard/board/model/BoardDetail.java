@@ -2,9 +2,22 @@ package com.navercorp.mjboard.board.model;
 
 import lombok.Setter;
 
+import java.util.List;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.Getter;
+
+/*
+ * 
+ * 
+ * 게시판 하나하나의 내용.
+ * 
+ * 
+ * 
+ * */
+
+
 
 @Setter
 @Getter
@@ -18,7 +31,11 @@ public class BoardDetail {
 	private String regUsername;
 	private String content;
 	private String category;
+	private String categoryName;
 	private String boardQueue;
+	private boolean update;
+	List<Comment> comments;
+	List<Category> categoryList;
 
 	public BoardDetail() {
 

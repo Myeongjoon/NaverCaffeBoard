@@ -1,7 +1,5 @@
 package com.navercorp.mjboard.board.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.navercorp.mjboard.board.model.Board;
 import com.navercorp.mjboard.board.model.BoardDetail;
-import com.navercorp.mjboard.board.model.Category;
-import com.navercorp.mjboard.board.model.Comment;
 import com.navercorp.mjboard.board.service.BoardService;
-import com.navercorp.mjboard.board.service.CategoryService;
-import com.navercorp.mjboard.board.service.CommentService;
 
 @Controller
 public class BoardController {
@@ -24,12 +19,6 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
-
-	@Autowired
-	private CategoryService categoryService;
-
-	@Autowired
-	private CommentService commentService;
 
 	/*
 	 * 
@@ -45,18 +34,13 @@ public class BoardController {
 	 * 
 	 */
 
-	@RequestMapping(value = "/board/cafeWrite")
-	public String openCafeWrite(@RequestParam(value = "boardNo", required = false) String boardNo,
+	@RequestMapping(value = "/board/boardWrite")
+	public String openBoardWrite(@RequestParam(value = "boardNo", required = false) String boardNo,
 			@RequestParam(value = "category", required = false) String category,
-			@RequestParam(value = "boardQueue", required = false) String boardQueue,
-			Model model) throws Exception {
-		List<Category> categoryList = categoryService.selectCategoryList();
-		model.addAttribute("boardNo", boardNo);
-		model.addAttribute("categorys", categoryList);
-		model.addAttribute("category", category);
-		boardQueue = boardService.selectBoardQueueNumber(boardNo);
-		model.addAttribute("boardQueue", boardQueue);
-		return "/board/cafeWrite";
+			@RequestParam(value = "boardQueue", required = false) String boardQueue, Model model) throws Exception {
+		BoardDetail boardDetail = boardService.createDefaultBoard(boardNo, category);
+		model.addAttribute("boardDetail", boardDetail);
+		return "/board/boardWrite";
 	}
 
 	/*
@@ -70,21 +54,24 @@ public class BoardController {
 	@RequestMapping(value = "/board/UpdateBoard")
 	public String openUpdateBoard(@RequestParam(value = "boardNo", required = true) String boardNo,
 			@RequestParam(value = "boardQueue", required = true) String boardQueue, Model model) throws Exception {
-		BoardDetail boardDetail = boardService.selectBoardDetailByBoard_no(boardNo, boardQueue);
-		List<Category> categoryList = categoryService.selectCategoryList();
+		BoardDetail boardDetail = boardService.selectBoardDetailByUpdateBoard(boardNo, boardQueue);
 		model.addAttribute("boardDetail", boardDetail);
-		model.addAttribute("boardNo",boardNo);
-		model.addAttribute("isUpdate", true);
-		model.addAttribute("category",boardDetail.getCategory());
-		model.addAttribute("categorys", categoryList);
-		model.addAttribute("boardQueue",boardQueue);
-		return "/board/cafeWrite";
+		return "/board/boardWrite";
 	}
 	
+	/*
+	 * 
+	 * 
+	 * 위의 수정 페이지를 통하여, 수정을 진행.
+	 * 
+	 * 
+	 * 
+	 * */
+
 	@RequestMapping(value = "/board/UpdateSelectedBoard")
 	public String updateBoardDetail(BoardDetail boardDetail) throws Exception {
 		boardService.updateBoard(boardDetail);
-		return "redirect:/board/cafeMain?page=1";
+		return "redirect:/board/boardMain?page=1";
 	}
 
 	/*
@@ -95,22 +82,12 @@ public class BoardController {
 	 * 
 	 */
 
-	@RequestMapping(value = "/board/cafeMain")
-	public String openCafeMain(@RequestParam(value = "page", required = true) int page,
+	@RequestMapping(value = "/board/boardMain")
+	public String openBoardMain(@RequestParam(value = "page", required = true) int page,
 			@RequestParam(value = "category", required = false) String category, Model model) throws Exception {
-		List<BoardDetail> list = boardService.selectBoardList(page, category);
-		List<Category> categoryList = categoryService.selectCategoryList();
-		int pageNum = boardService.selectPageNumber(page, category);
-		boolean hasNext = boardService.hasNext(page,category);
-		String categoryName = categoryService.selectCategoryName(category);
-		model.addAttribute("hasNext", hasNext);
-		model.addAttribute("category", category);
-		model.addAttribute("categoryName", categoryName);
-		model.addAttribute("categorys", categoryList);
-		model.addAttribute("currentPage",page);
-		model.addAttribute("pageNum", pageNum);
-		model.addAttribute("list", list);
-		return "/board/cafeMain";
+		Board board = boardService.createBoard(page, category);
+		model.addAttribute("board", board);
+		return "/board/boardMain";
 	}
 
 	/*
@@ -120,17 +97,12 @@ public class BoardController {
 	 * 
 	 */
 
-	@RequestMapping(value = "/board/cafeMainDetail")
-	public String openCafeMainDetail(@RequestParam(value = "boardNo", required = true) String boardNo,
+	@RequestMapping(value = "/board/boardMainDetail")
+	public String openBoardMainDetail(@RequestParam(value = "boardNo", required = true) String boardNo,
 			@RequestParam(value = "boardQueue", required = true) String boardQueue, Model model) throws Exception {
-		BoardDetail boardDetail = boardService.selectBoardDetailByBoard_no(boardNo, boardQueue);
-		List<Comment> comments = commentService.selectCommentsList(boardDetail);
-		String categoryName = categoryService.selectCategoryName(boardDetail.getCategory());
+		BoardDetail boardDetail = boardService.selectBoardDetail(boardNo, boardQueue);
 		model.addAttribute("boardDetail", boardDetail);
-		model.addAttribute("comments", comments);
-		model.addAttribute("boardQueue", boardQueue);
-		model.addAttribute("categoryName", categoryName);
-		return "/board/cafeMainDetail";
+		return "/board/boardMainDetail";
 	}
 
 	/*
@@ -143,7 +115,7 @@ public class BoardController {
 	@RequestMapping(value = "/board/insertBoard")
 	public String insertBoard(BoardDetail boardDetail) throws Exception {
 		boardService.insertBoard(boardDetail);
-		return "redirect:/board/cafeMain?page=1";
+		return "redirect:/board/boardMain?page=1";
 	}
 
 	/*
@@ -155,8 +127,9 @@ public class BoardController {
 	 */
 
 	@RequestMapping(value = "/board/deleteBoard")
-	public String deleteBoard(@RequestParam(value = "boardNo", required = true) String boardNo) throws Exception {
-		boardService.deleteBoard(boardNo);
-		return "redirect:/board/cafeMain?page=1";
+	public String deleteBoard(@RequestParam(value = "boardQueue", required = true) String boardQueue,
+			@RequestParam(value = "boardNo", required = true) String boardNo) throws Exception {
+		boardService.deleteBoard(boardNo, boardQueue);
+		return "redirect:/board/boardMain?page=1";
 	}
 }

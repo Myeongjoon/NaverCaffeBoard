@@ -1,36 +1,29 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:beans="http://www.springframework.org/schema/beans" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
                     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
                     http://www.springframework.org/schema/security 
                     http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 	<beans:bean id="encoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-	<beans:bean id="userService" class="com.navercorp.mjboard.auth.service.UserService" />
+	<beans:bean id="userService"
+		class="com.navercorp.mjboard.auth.service.UserService" />
 	<beans:bean id="customAuthenticationProvider"
 		class="com.navercorp.mjboard.auth.security.CustomAuthenticationProvider" />
-	<!-- 
-		
-		http 태그 : spring security 옵션들
-		
-		form-login : 로그인 할 뷰, 넘겨줄 뷰, 등을 설정
-		
-		csrf : 로그인 할때, 매번 토큰을 넘겨줘야 하는데, 이를 그냥 지움.
-		
-		headers : default는 iframe을 거절하게 되는데, 이를 가능하게 함.
-		
-	 -->
+	<!-- http 태그 : spring security 옵션들 form-login : 로그인 할 뷰, 넘겨줄 뷰, 등을 설정 csrf 
+		: 로그인 할때, 매번 토큰을 넘겨줘야 하는데, 이를 그냥 지움. headers : default는 iframe을 거절하게 되는데, 
+		이를 가능하게 함. -->
 	<http use-expressions="true">
 		<logout logout-url="/logout" logout-success-url="/login" />
 		<form-login login-page="/login/" login-processing-url="/spring_security_check"
-			authentication-failure-url="/board/cafeMain?page=1"
-			default-target-url="/board/cafeMain?page=1" always-use-default-target="true" />
+			authentication-failure-url="/login?falure=true"
+			default-target-url="/board/boardMain?page=1"
+			always-use-default-target="true" />
 		<intercept-url pattern="/board/**" access="isAuthenticated()" />
-		<csrf disabled="true"/>
+		<csrf disabled="true" />
 		<headers>
-        	<frame-options disabled="true"></frame-options>
-    	</headers>
+			<frame-options disabled="true"></frame-options>
+		</headers>
 	</http>
 	<authentication-manager>
 		<authentication-provider ref="customAuthenticationProvider">

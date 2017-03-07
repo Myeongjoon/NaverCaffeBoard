@@ -7,7 +7,7 @@
 	<name>pro</name>
 	<packaging>war</packaging>
 	<version>0.1.1-BUILD-SNAPSHOT</version>
-	
+
 	<properties>
 		<java-version>1.8</java-version>
 		<source-encoding>UTF-8</source-encoding>
@@ -18,8 +18,37 @@
 		<org.mybatis.version>3.3.0</org.mybatis.version>
 		<org.mybatis.spring.version>1.2.3</org.mybatis.spring.version>
 	</properties>
-	
+
 	<dependencies>
+
+
+		<!-- elasticSearch -->
+		<dependency>
+			<groupId>org.elasticsearch.client</groupId>
+			<artifactId>transport</artifactId>
+			<version>5.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>5.2.2</version>
+		</dependency>
+
+
+
+		<!-- json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20160810</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+
 		<!-- spring core -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -64,7 +93,7 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-		
+
 		<!-- Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -88,7 +117,7 @@
 		</dependency>
 
 		<!-- Security -->
-		
+
 		<!-- Servlet -->
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
@@ -109,9 +138,9 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>jstl</artifactId>
-		    <version>1.2</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
 		</dependency>
 
 		<!-- Web -->
@@ -139,11 +168,11 @@
 			<version>5.1.31</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-dbcp2</artifactId>
-		    <version>2.1</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.1</version>
 		</dependency>
-		
+
 		<!-- Logging (SLF4j) -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -155,33 +184,23 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>1.7.7</version>
 		</dependency>
-		
-		
-		<!-- 
-		
-		log4j의 로그를 더 많이 찍기 위해
-		
-		SQL Result를 로그로 찍음
-		
-		 -->
-		
-		<dependency>  
-		  <groupId>org.lazyluke</groupId>  
-		  <artifactId>log4jdbc-remix</artifactId>  
-		  <version>0.2.4</version>  
+
+
+		<!-- log4j의 로그를 더 많이 찍기 위해 SQL Result를 로그로 찍음 -->
+
+		<dependency>
+			<groupId>org.lazyluke</groupId>
+			<artifactId>log4jdbc-remix</artifactId>
+			<version>0.2.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.7</version>
 		</dependency>
-		
-		
-		<!-- 
-		
-		log4j
-		
-		 -->
+
+
+		<!-- log4j -->
 
 		<!-- Utility -->
 		<dependency>
@@ -190,12 +209,12 @@
 			<version>1.16.14</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- test -->
 		<dependency>
-		    <groupId>junit</groupId>
-		    <artifactId>junit-dep</artifactId>
-		    <version>4.11</version>
+			<groupId>junit</groupId>
+			<artifactId>junit-dep</artifactId>
+			<version>4.11</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -204,9 +223,25 @@
 			<type>jar</type>
 			<scope>test</scope>
 		</dependency>
-
+		<!-- elastic search log -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lmax</groupId>
+			<artifactId>disruptor</artifactId>
+			<version>3.3.6</version>
+		</dependency>
+		<!-- /elastic search log -->
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>

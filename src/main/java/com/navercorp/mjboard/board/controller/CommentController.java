@@ -34,7 +34,7 @@ public class CommentController {
 	@RequestMapping(value = "/comment/insertComment")
 	public String insertComment(Comment comment) throws Exception {
 		commentsService.insertComment(comment);
-		return "redirect:/board/cafeMainDetail?boardNo="+comment.getBoardNo()+"&boardQueue="+comment.getBoardQueue();
+		return "redirect:/board/boardMainDetail?boardNo="+comment.getBoardNo()+"&boardQueue="+comment.getBoardQueue();
 	}
 	
 	/*
@@ -48,6 +48,6 @@ public class CommentController {
 	@RequestMapping(value = "/comment/deleteComment")
 	public String deleteComment(Comment comment) throws Exception {
 		commentsService.deleteComment(comment);
-		return "redirect:/board/cafeMainDetail?boardNo="+comment.getBoardNo()+"&boardQueue="+comment.getBoardQueue();
+		return "redirect:/board/boardMainDetail?boardNo="+comment.getBoardNo()+"&boardQueue="+comment.getBoardQueue();
 	}
 }

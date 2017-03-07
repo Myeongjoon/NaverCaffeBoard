@@ -15,4 +15,6 @@ public interface CommentDAO {
 	public void insertComment(Comment comment);
 	
 	public void deleteComment(Comment comment);
+	
+	public String selectUserId(Comment comment);
 }

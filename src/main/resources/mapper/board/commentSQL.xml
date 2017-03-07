@@ -10,35 +10,45 @@
 		<result property="userName" column="user_name" />
 	</resultMap>
 
-	<select id="selectCommentsList" resultMap="cmtResultMap"
-		parameterType="boardDtl">
+	<select id="selectCommentsList" parameterType="boardDtl"
+		resultMap="cmtResultMap">
 		SELECT
-		content,user_name,user_id
+		content,user_name,user_id,comments_no
 		FROM
 		comments
 		WHERE
 		board_no=#{boardNo} and
 		board_queue=#{boardQueue}
 	</select>
+	<select id="selectUserId" parameterType="boardDtl" resultType="string">
+		SELECT
+		user_id
+		FROM
+		comments
+		WHERE
+		board_no=#{boardNo} and
+		board_queue=#{boardQueue} and
+		comments_no = #{commentNo}
+	</select>
 
 	<insert id="insertComment" parameterType="cmt">
 		INSERT
 		INTO
 		comments(
-		board_no
-		,comments_no
-		,content
-		,user_name
-		,user_id,
+		board_no,
+		comments_no,
+		content,
+		user_name,
+		user_id,
 		board_queue
 		)
 		VALUES(
-		#{boardNo}
-		,default
-		,#{content}
-		,#{userName}
-		,#{userId}
-		,#{boardQueue}
+		#{boardNo},
+		default,
+		#{content},
+		#{userName},
+		#{userId},
+		#{boardQueue}
 		)
 	</insert>
 	<delete id="deleteComment" parameterType="cmt">

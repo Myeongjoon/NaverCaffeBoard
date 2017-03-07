@@ -6,12 +6,23 @@ import org.apache.ibatis.type.Alias;
 
 import lombok.Getter;
 
+
+/*
+ * 
+ * 댓글
+ * 
+ * 
+ * 
+ * */
+
+
+
 @Setter
 @Getter
 @Alias("cmt")
 public class Comment {
-	private int boardNo;
-	private int commentNo;
+	private String boardNo;
+	private String commentNo;
 	private String content;
 	private String userId;
 	private String userName;

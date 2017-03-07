@@ -22,8 +22,10 @@ public interface BoardDAO {
 
 	public void updateBoard(BoardDetail boardDetail);
 
-	public void deleteBoard(String board_no);
+	public void deleteBoard(BoardDetail boardDetail);
 
 	public String selectBoardQueueNumber(Integer boardNo);
+	
+	public String selectUserId(BoardDetail boardDetail);
 
 }
