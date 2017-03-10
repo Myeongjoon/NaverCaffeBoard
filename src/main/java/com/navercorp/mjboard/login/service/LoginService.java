@@ -1,5 +1,6 @@
 package com.navercorp.mjboard.login.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import com.navercorp.mjboard.auth.model.Role;
+import com.navercorp.mjboard.auth.model.Roles;
 import com.navercorp.mjboard.auth.model.User;
 import com.navercorp.mjboard.login.dao.LoginDAO;
+import com.navercorp.mjboard.login.dao.RoleDAO;
 
 @Service
 public class LoginService {
@@ -32,11 +36,21 @@ public class LoginService {
 
 	@Autowired
 	private LoginDAO loginDAO;
+	@Autowired
+	private RoleDAO roleDAO;
 
 	public String insertUserAndRedirect(User user) throws Exception {
 		if (user.getId() == "" || user.getPassword() == "") {
 			return "redirect:/login/signup?falure=true";
 		}
+		Roles roles = new Roles();
+		Role role = new Role();
+		role.setName("ROLE_USER");
+		List<Role> roleList = new ArrayList<Role>();
+		roleList.add(role);
+		roles.setRole(roleList);
+		roles.setUserId(user.getId());
+		roleDAO.insertRoles(roles);
 		User passwordEncodedUser = getPasswordEncodedUser(user);
 		List<User> result = loginDAO.selectByID(passwordEncodedUser.getId());
 		if (result.size() == 0) {
@@ -65,5 +79,16 @@ public class LoginService {
 		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
+	}
+
+	public Roles selectRoles(String id) {
+		String[] result =  roleDAO.selectRoles(id);
+		Roles roles = new Roles();
+		List<Role> roleList = new ArrayList<Role>();
+		for(String st : result){
+			roleList.add(new Role(st));
+		}
+		roles.setRole(roleList);
+		return roles;
 	}
 }

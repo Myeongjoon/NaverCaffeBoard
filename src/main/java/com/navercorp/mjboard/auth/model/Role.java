@@ -9,6 +9,14 @@ public class Role implements GrantedAuthority {
 	private String name;
 	private List<Privilege> privileges;
 
+	public Role() {
+
+	}
+
+	public Role(String name) {
+		this.name = name;
+	}
+
 	public String getName() {
 		return name;
 	}

@@ -12,7 +12,7 @@ public interface BoardDAO {
 
 	public List<BoardDetail> selectBoardList(Category category);
 
-	public Integer selectTotalBoard(String category);
+	public Integer selectTotalBoard(Integer category);
 
 	public void insertBoard(BoardDetail boardDetail);
 
@@ -25,7 +25,13 @@ public interface BoardDAO {
 	public void deleteBoard(BoardDetail boardDetail);
 
 	public String selectBoardQueueNumber(Integer boardNo);
-	
+
 	public String selectUserId(BoardDetail boardDetail);
+
+	public String selectUserCategory(BoardDetail boardDetail);
+
+	public void decreaseTotalBoard(Integer category);
+
+	public void increaseTotalBoard(Integer category);
 
 }

@@ -77,7 +77,9 @@
 	}
 	function customsubmitLogin() {
 		var mysubmit = new Mysubmit();
-		mysubmit.init("/spring_security_check");
+		mysubmit.checkById("id");
+		mysubmit.checkById("password");
+		mysubmit.init("/spring_security_check","${_csrf.token}","${_csrf.parameterName}");
 		mysubmit.getValueById("id", "username");
 		mysubmit.getValueById("password", "password");
 		mysubmit.frmSubmit();

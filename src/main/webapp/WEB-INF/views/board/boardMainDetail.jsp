@@ -136,16 +136,24 @@
 															</table>
 														</div>
 														<!-- 삭제 버튼 -->
-														<c:choose>
-															<c:when test="${cmt.userId eq principal.id}">
-																<p class="btn_edit m-tcol-c">
-																	<a href="#" onClick="deleteComment(${cmt.commentNo})"
-																		class="filter-70 m-tcol-c _btnDelete">삭제</a>
-																</p>
-															</c:when>
-															<c:otherwise>
-															</c:otherwise>
-														</c:choose>
+														<sec:authorize access="!hasRole('ADMIN')">
+															<c:choose>
+																<c:when test="${cmt.userId eq principal.id}">
+																	<p class="btn_edit m-tcol-c">
+																		<a href="#" onClick="deleteComment(${cmt.commentNo})"
+																			class="filter-70 m-tcol-c _btnDelete">삭제</a>
+																	</p>
+																</c:when>
+																<c:otherwise>
+																</c:otherwise>
+															</c:choose>
+														</sec:authorize>
+														<sec:authorize access="hasRole('ADMIN')">
+															<p class="btn_edit m-tcol-c">
+																<a href="#" onClick="deleteComment(${cmt.commentNo})"
+																	class="filter-70 m-tcol-c _btnDelete">삭제</a>
+															</p>
+														</sec:authorize>
 														<!-- /삭제 버튼 -->
 													</div>
 													<p class="comm m-tcol-c" style="">
@@ -205,31 +213,53 @@
 						<div id="replyFormBtn" class="btn _rosRestrict">
 							<span></span>
 							<p>
-								<a href="/board/boardWrite?boardNo=${boardDetail.boardNo}&category=${boardDetail.category}" class="m-tcol-c"><img
+								<a
+									href="/board/boardWrite?boardNo=${boardDetail.boardNo}&category=${boardDetail.category}"
+									class="m-tcol-c"><img
 									src="http://cafeimgs.naver.net/cafe4/ico-btn-check.gif"
 									width="9" height="8" alt="">답글</a>
 							</p>
 						</div>
-						<c:choose>
-							<c:when test="${boardDetail.regId eq principal.id}">
-								<div id="modifyFormBtn" class="btn _rosRestrict">
-									<span></span>
-									<p>
-										<a href="/board/UpdateBoard?boardNo=${boardDetail.boardNo }&boardQueue=${boardDetail.boardQueue}"
-											class="m-tcol-c">수정</a>
-									</p>
-								</div>
-								<div class="btn _rosRestrict">
-									<span></span>
-									<p>
-										<a href="/board/deleteBoard?boardNo=${boardDetail.boardNo }&boardQueue=${boardDetail.boardQueue}"
-											class="m-tcol-c">삭제</a>
-									</p>
-								</div>
-							</c:when>
-							<c:otherwise>
-							</c:otherwise>
-						</c:choose>
+						<sec:authorize access="!hasRole('ADMIN')">
+							<c:choose>
+								<c:when test="${boardDetail.regId eq principal.id}">
+									<div id="modifyFormBtn" class="btn _rosRestrict">
+										<span></span>
+										<p>
+											<a
+												href="/board/UpdateBoard?boardNo=${boardDetail.boardNo }&boardQueue=${boardDetail.boardQueue}"
+												class="m-tcol-c">수정</a>
+										</p>
+									</div>
+									<div class="btn _rosRestrict">
+										<span></span>
+										<p>
+											<a
+												href="/board/deleteBoard?boardNo=${boardDetail.boardNo }&boardQueue=${boardDetail.boardQueue}"
+												class="m-tcol-c">삭제</a>
+										</p>
+									</div>
+								</c:when>
+							</c:choose>
+						</sec:authorize>
+						<sec:authorize access="hasRole('ADMIN')">
+							<div id="modifyFormBtn" class="btn _rosRestrict">
+								<span></span>
+								<p>
+									<a
+										href="/board/UpdateBoard?boardNo=${boardDetail.boardNo }&boardQueue=${boardDetail.boardQueue}"
+										class="m-tcol-c">수정</a>
+								</p>
+							</div>
+							<div class="btn _rosRestrict">
+								<span></span>
+								<p>
+									<a
+										href="/board/deleteBoard?boardNo=${boardDetail.boardNo }&boardQueue=${boardDetail.boardQueue}"
+										class="m-tcol-c">삭제</a>
+								</p>
+							</div>
+						</sec:authorize>
 						<div class="btn" onclick="goList();">
 							<span></span>
 							<p>
@@ -252,7 +282,7 @@
 		}
 		function submitComment(){
 			var mysubmit = new Mysubmit();
-			mysubmit.init("/comment/insertComment");
+			mysubmit.init("/comment/insertComment","${_csrf.token}","${_csrf.parameterName}");
 			mysubmit.getValueByValue(${boardDetail.boardNo}, "boardNo");
 			mysubmit.getValueById("comment_text", "content");
 			mysubmit.getValueByValue("<sec:authentication property="principal.id"/>","userId");
@@ -262,7 +292,7 @@
 		}
 		function deleteComment(commentNo){
 			var mysubmit = new Mysubmit();
-			mysubmit.init("/comment/deleteComment");
+			mysubmit.init("/comment/deleteComment","${_csrf.token}","${_csrf.parameterName}");
 			mysubmit.getValueByValue(${boardDetail.boardNo}, "boardNo");
 			mysubmit.getValueByValue(commentNo, "commentNo");
 			mysubmit.getValueByValue(${boardDetail.boardQueue}, "boardQueue");

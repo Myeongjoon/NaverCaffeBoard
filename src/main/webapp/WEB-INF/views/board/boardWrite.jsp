@@ -118,7 +118,7 @@
 	<script type="text/javascript">
 		window.onload = function() {
 			<c:choose>
-			<c:when test="${fn:length(boardDetail.boardNo) == 0}">
+			<c:when test="${boardDetail.falure eq true}">
 				alert("잘못된 접근 입니다.");
 				location.href='/board/boardMain?page=1';
 			</c:when>
@@ -128,10 +128,10 @@
 			var mysubmit = new Mysubmit();
 			<c:choose>
 				<c:when test="${boardDetail.update ne null && boardDetail.update eq true}">
-					mysubmit.init("/board/UpdateSelectedBoard");
+					mysubmit.init("/board/UpdateSelectedBoard","${_csrf.token}","${_csrf.parameterName}");
 				</c:when>
 				<c:otherwise>
-					mysubmit.init("/board/insertBoard");
+					mysubmit.init("/board/insertBoard","${_csrf.token}","${_csrf.parameterName}");
 				</c:otherwise>
 			</c:choose>
 			mysubmit.getValueById("subject", "title");

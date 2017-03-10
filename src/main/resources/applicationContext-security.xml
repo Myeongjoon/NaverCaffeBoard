@@ -13,17 +13,20 @@
 	<!-- http 태그 : spring security 옵션들 form-login : 로그인 할 뷰, 넘겨줄 뷰, 등을 설정 csrf 
 		: 로그인 할때, 매번 토큰을 넘겨줘야 하는데, 이를 그냥 지움. headers : default는 iframe을 거절하게 되는데, 
 		이를 가능하게 함. -->
-	<http use-expressions="true">
+	<http auto-config="true">
 		<logout logout-url="/logout" logout-success-url="/login" />
 		<form-login login-page="/login/" login-processing-url="/spring_security_check"
-			authentication-failure-url="/login?falure=true"
-			default-target-url="/board/boardMain?page=1"
+			authentication-failure-url="/login?falure=true" default-target-url="/board/boardMain?page=1"
 			always-use-default-target="true" />
 		<intercept-url pattern="/board/**" access="isAuthenticated()" />
-		<csrf disabled="true" />
+		<csrf/>
 		<headers>
 			<frame-options disabled="true"></frame-options>
 		</headers>
+		<session-management invalid-session-url="/login">
+			<concurrency-control max-sessions="1"
+				expired-url="/login" />
+		</session-management>
 	</http>
 	<authentication-manager>
 		<authentication-provider ref="customAuthenticationProvider">

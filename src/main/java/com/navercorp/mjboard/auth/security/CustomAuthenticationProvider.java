@@ -1,8 +1,6 @@
 package com.navercorp.mjboard.auth.security;
 
 import java.util.Collection;
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-
+import com.navercorp.mjboard.auth.model.Roles;
 import com.navercorp.mjboard.auth.model.User;
 import com.navercorp.mjboard.login.service.LoginService;
 
@@ -26,7 +24,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	 * 
 	 * */
 
-	@Resource(name = "loginService")
+	@Autowired
 	private LoginService loginService;
 
 	@Autowired
@@ -60,12 +58,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			if (!passwordEncoder.matches(password, user.getPassword())) {
 				throw new BadCredentialsException("invaild password");
 			}
+			Roles roles = loginService.selectRoles(id);
+			user.setAuthorities(roles.getRole());
 			authorities = user.getAuthorities();
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException(e.getMessage());
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}
+
 		return new UsernamePasswordAuthenticationToken(user, password, authorities);
 	}
 

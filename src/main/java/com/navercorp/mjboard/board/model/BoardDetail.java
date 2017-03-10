@@ -34,6 +34,7 @@ public class BoardDetail {
 	private String categoryName;
 	private String boardQueue;
 	private boolean update;
+	private boolean falure;
 	List<Comment> comments;
 	List<Category> categoryList;
 

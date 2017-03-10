@@ -21,7 +21,18 @@
 
 	<dependencies>
 
+		<!-- tx -->
 
+		<dependency>
+			<groupId>aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.5.3</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>2.1_3</version>
+		</dependency>
 		<!-- elasticSearch -->
 		<dependency>
 			<groupId>org.elasticsearch.client</groupId>

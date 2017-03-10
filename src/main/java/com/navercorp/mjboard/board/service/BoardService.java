@@ -2,6 +2,8 @@ package com.navercorp.mjboard.board.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -59,13 +61,13 @@ public class BoardService {
 	 * 
 	 */
 
-	public void updateBoard(BoardDetail boardDetail) {
+	public void updateBoard(HttpServletRequest request, BoardDetail boardDetail) {
 		boardDetail.setBoardNo(boardDetail.getBoardNo());
 		boardDetail.setBoardQueue(boardDetail.getBoardQueue());
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		String boardRegId = boardDAO.selectUserId(boardDetail);
-		if (user.getId().equals(boardRegId)) {
+		if (request.isUserInRole("ROLE_ADMIN") || user.getId().equals(boardRegId)) {
 			boardDAO.updateBoard(boardDetail);
 		}
 	}
@@ -77,16 +79,19 @@ public class BoardService {
 	 * 
 	 */
 
-	public void deleteBoard(String boardNo, String boardQueue) {
+	public void deleteBoard(HttpServletRequest request, String boardNo, String boardQueue) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		BoardDetail boardDetail = new BoardDetail();
 		boardDetail.setBoardNo(boardNo);
 		boardDetail.setBoardQueue(boardQueue);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		String boardRegId = boardDAO.selectUserId(boardDetail);
-		if (user.getId().equals(boardRegId)) {
+		String category = boardDAO.selectUserCategory(boardDetail);
+		if (request.isUserInRole("ROLE_ADMIN") || user.getId().equals(boardRegId)) {
 			boardDAO.deleteBoard(boardDetail);
 		}
+		boardDAO.decreaseTotalBoard(0);
+		boardDAO.decreaseTotalBoard(Integer.parseInt(category));
 	}
 
 	public List<BoardDetail> selectBoardList(int page, String categoryNum) {
@@ -102,19 +107,21 @@ public class BoardService {
 	 * 
 	 */
 
-	public BoardDetail selectBoardDetailByUpdateBoard(String boardNo, String boardQueue) throws Exception {
+	public BoardDetail selectBoardDetailByUpdateBoard(HttpServletRequest request, String boardNo, String boardQueue)
+			throws Exception {
 		BoardDetail boardDetail = new BoardDetail(boardNo, boardQueue);
 		boardDetail = boardDAO.selectBoardDetail(boardDetail);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		String boardRegId = boardDAO.selectUserId(boardDetail);
-		if (user.getId().equals(boardRegId)) {
+		if (request.isUserInRole("ROLE_ADMIN") || user.getId().equals(boardRegId)) {
 			boardDetail.setComments(commentService.selectCommentsList(boardDetail));
 			boardDetail.setCategoryName(categoryService.selectCategoryName(boardDetail.getCategory()));
 			boardDetail.setUpdate(true);
 			boardDetail.setCategoryList(categoryService.selectCategoryList());
 			return boardDetail;
 		}
+		boardDetail.setFalure(true);
 		return null;
 	}
 
@@ -152,6 +159,8 @@ public class BoardService {
 
 	public void insertBoard(BoardDetail boardDetail) {
 		boardDAO.insertBoard(boardDetail);
+		boardDAO.increaseTotalBoard(0);
+		boardDAO.increaseTotalBoard(Integer.parseInt(boardDetail.getCategory()));
 	}
 
 	public String selectBoardQueueNumber(String boardNo) {
@@ -165,7 +174,8 @@ public class BoardService {
 	 * 
 	 */
 	public Integer selectPageNumber(int page, String category) {
-		Integer totalBoardNumber = boardDAO.selectTotalBoard(category);
+		Integer totalBoardNumber = category == null ? boardDAO.selectTotalBoard(null)
+				: boardDAO.selectTotalBoard(Integer.parseInt(category));
 		int pageBoardNumber = (((page - 1) / 10)) * 100;
 		int remain = totalBoardNumber - pageBoardNumber;
 		remain = remain >= 100 ? 100 : remain;
@@ -185,6 +195,7 @@ public class BoardService {
 	}
 
 	public Integer selectAllBoardNum(String category) {
-		return boardDAO.selectTotalBoard(category);
+		return category == null ? boardDAO.selectTotalBoard(null)
+				: boardDAO.selectTotalBoard(Integer.parseInt(category));
 	}
 }

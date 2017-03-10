@@ -1,6 +1,9 @@
 package com.navercorp.mjboard.board.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +17,7 @@ public class ElasticBoardController {
 
 	@Autowired
 	private ElasticBoardService ElasticboardService;
-
+	Logger logger = LoggerFactory.getLogger(ElasticBoardController.class);
 	/*
 	 * 
 	 * 
@@ -23,9 +26,8 @@ public class ElasticBoardController {
 	 * 
 	 * 
 	 * 
-	 * */
-	
-	
+	 */
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/board/boardMainSearch")
 	public String openBoardMainBySearch(@RequestParam(value = "page", required = true) int page,
 			@RequestParam(value = "category", required = false) String category, Model model, String query)

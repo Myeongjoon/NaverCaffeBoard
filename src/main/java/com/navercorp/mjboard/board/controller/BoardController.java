@@ -1,8 +1,11 @@
 package com.navercorp.mjboard.board.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +36,7 @@ public class BoardController {
 	 * category가 있으면, 답글.
 	 * 
 	 */
-
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/board/boardWrite")
 	public String openBoardWrite(@RequestParam(value = "boardNo", required = false) String boardNo,
 			@RequestParam(value = "category", required = false) String category,
@@ -50,15 +53,16 @@ public class BoardController {
 	 * 
 	 * 
 	 */
-
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/board/UpdateBoard")
-	public String openUpdateBoard(@RequestParam(value = "boardNo", required = true) String boardNo,
+	public String openUpdateBoard(HttpServletRequest request,
+			@RequestParam(value = "boardNo", required = true) String boardNo,
 			@RequestParam(value = "boardQueue", required = true) String boardQueue, Model model) throws Exception {
-		BoardDetail boardDetail = boardService.selectBoardDetailByUpdateBoard(boardNo, boardQueue);
+		BoardDetail boardDetail = boardService.selectBoardDetailByUpdateBoard(request, boardNo, boardQueue);
 		model.addAttribute("boardDetail", boardDetail);
 		return "/board/boardWrite";
 	}
-	
+
 	/*
 	 * 
 	 * 
@@ -66,11 +70,11 @@ public class BoardController {
 	 * 
 	 * 
 	 * 
-	 * */
-
+	 */
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/board/UpdateSelectedBoard")
-	public String updateBoardDetail(BoardDetail boardDetail) throws Exception {
-		boardService.updateBoard(boardDetail);
+	public String updateBoardDetail(HttpServletRequest request,BoardDetail boardDetail) throws Exception {
+		boardService.updateBoard(request,boardDetail);
 		return "redirect:/board/boardMain?page=1";
 	}
 
@@ -81,7 +85,7 @@ public class BoardController {
 	 * 
 	 * 
 	 */
-
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/board/boardMain")
 	public String openBoardMain(@RequestParam(value = "page", required = true) int page,
 			@RequestParam(value = "category", required = false) String category, Model model) throws Exception {
@@ -96,7 +100,7 @@ public class BoardController {
 	 * 
 	 * 
 	 */
-
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/board/boardMainDetail")
 	public String openBoardMainDetail(@RequestParam(value = "boardNo", required = true) String boardNo,
 			@RequestParam(value = "boardQueue", required = true) String boardQueue, Model model) throws Exception {
@@ -111,7 +115,7 @@ public class BoardController {
 	 * 
 	 * 
 	 */
-
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/board/insertBoard")
 	public String insertBoard(BoardDetail boardDetail) throws Exception {
 		boardService.insertBoard(boardDetail);
@@ -125,11 +129,12 @@ public class BoardController {
 	 * 
 	 * 
 	 */
-
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/board/deleteBoard")
-	public String deleteBoard(@RequestParam(value = "boardQueue", required = true) String boardQueue,
+	public String deleteBoard(HttpServletRequest request,
+			@RequestParam(value = "boardQueue", required = true) String boardQueue,
 			@RequestParam(value = "boardNo", required = true) String boardNo) throws Exception {
-		boardService.deleteBoard(boardNo, boardQueue);
+		boardService.deleteBoard(request, boardNo, boardQueue);
 		return "redirect:/board/boardMain?page=1";
 	}
 }

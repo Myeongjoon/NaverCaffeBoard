@@ -201,7 +201,7 @@
 	<script>
 		function searchBoard() {
 			var mysubmit = new Mysubmit();
-			mysubmit.init("board/boardMainSearch?page=1");
+			mysubmit.init("board/boardMainSearch?page=1","${_csrf.token}","${_csrf.parameterName}");
 			if (mysubmit.getValueById("searchValue", "query") == false) {
 				alert("검색어가 없습니다.");
 				return false;
@@ -214,9 +214,9 @@
 			var myURLFront = document.location.href.split("/")[4].split("?")[0];
 			var mysubmit = new Mysubmit();
 			if (myURLFront == "boardMain") {
-				mysubmit.init("board/boardMain?page=" + page);
+				mysubmit.init("board/boardMain?page=" + page,"${_csrf.token}","${_csrf.parameterName}");
 			} else {
-				mysubmit.init("board/boardMainSearch?page=" + page);
+				mysubmit.init("board/boardMainSearch?page=" + page,"${_csrf.token}","${_csrf.parameterName}");
 				mysubmit.getValueByValue("${board.query}", "query");
 			}
 			mysubmit.getValueByValue("${board.category}", "category");

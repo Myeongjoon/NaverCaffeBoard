@@ -44,7 +44,7 @@ public class ElasticBoardService {
 	
 	
 	public Board createBoard(int page, String category, String query) throws JSONException, IOException {
-		@SuppressWarnings({ "unchecked", "resource" })
+		@SuppressWarnings("resource")
 		TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
 				.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("10.110.243.90"), 9300));
 		SearchRequestBuilder reqBuilder = client.prepareSearch("seunjeon-idx")

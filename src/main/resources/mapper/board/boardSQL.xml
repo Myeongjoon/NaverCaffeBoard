@@ -34,17 +34,44 @@
 		LIMIT #{page} , #{offset}
 	</select>
 
-	<select id="selectTotalBoard" parameterType="String" resultType="integer">
+	<select id="selectTotalBoard" parameterType="integer"
+		resultType="integer">
 		SELECT
-		count(board_no)
+		count
 		FROM
-		board
-		WHERE
-		if(#{category} is
-		null,
-		del_check='N',del_check='N' and category=#{category})
+		board_total_tbl
+		<choose>
+			<when test="value != null">
+				WHERE
+				category=#{value}
+			</when>
+			<otherwise>
+				WHERE
+				category=0
+			</otherwise>
+		</choose>
 	</select>
 
+	<update id="increaseTotalBoard" parameterType="integer">
+		update board_total_tbl
+		set count = count+1
+		<choose>
+			<when test="value != null">
+				WHERE
+				category=#{value}
+			</when>
+		</choose>
+	</update>
+	<update id="decreaseTotalBoard" parameterType="integer">
+		update board_total_tbl
+		set count = count-1
+		<choose>
+			<when test="value != null">
+				WHERE
+				category=#{value}
+			</when>
+		</choose>
+	</update>
 	<insert id="insertBoard" parameterType="boardDtl">
 		INSERT
 		INTO
@@ -140,6 +167,17 @@
 
 	<select id="selectUserId" parameterType="boardDtl" resultType="string">
 		select reg_id
+		from
+		board
+		WHERE
+		board_no
+		= #{boardNo} and
+		board_queue =
+		#{boardQueue}
+	</select>
+
+	<select id="selectUserCategory" parameterType="boardDtl" resultType="string">
+		select category
 		from
 		board
 		WHERE
