@@ -116,6 +116,17 @@
 				});
 	</script>
 	<script type="text/javascript">
+	$(window).bind('beforeunload', function()
+			{
+			        return '게시물을 입력하고, 이 페이지에서 나가겠습니까?';<br>
+			};
+			//Form Submit 등 onBeforeUnload Event가 발생하길 원하지 않는 경우, 이벤트 해제
+
+			$('form').submit(function()
+			{
+			    $(window).unbind('beforeunload');
+			});
+
 		window.onload = function() {
 			<c:choose>
 			<c:when test="${boardDetail.falure eq true}">

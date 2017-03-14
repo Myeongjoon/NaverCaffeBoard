@@ -143,7 +143,7 @@
 							</a></td>
 						</c:when>
 					</c:choose>
-					<c:forEach var="page" begin="1" end="${board.pageNum}" step="1">
+					<c:forEach var="page" begin="${ ((board.currentPage-1)-((board.currentPage-1)%10))+1}" end="${((board.currentPage-1)-((board.currentPage-1)%10))+board.pageNum}" step="1">
 						<c:choose>
 							<c:when test="${board.currentPage eq page }">
 								<td><a href="#"
