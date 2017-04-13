@@ -27,4 +27,10 @@ public class Comment {
 	private String userId;
 	private String userName;
 	private String boardQueue;
+	public String getBoardQueue() {
+		return this.boardQueue;
+	}
+	public String getBoardNo() {
+		return this.boardNo;
+	}
 }

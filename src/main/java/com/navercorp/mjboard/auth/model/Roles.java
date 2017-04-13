@@ -10,4 +10,13 @@ import lombok.Setter;
 public class Roles {
 	private List<Role> role;
 	private String userId;
+	public List<Role> getRole() {
+		return role;
+	}
+	public void setRole(List<Role> roleList) {
+		this.role=roleList;
+	}
+	public void setUserId(String id) {
+		this.userId=id;
+	}
 }

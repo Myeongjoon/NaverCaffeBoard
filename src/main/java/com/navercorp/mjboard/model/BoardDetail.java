@@ -17,4 +17,10 @@ public class BoardDetail {
 	private String regId;
 	private String content;
 	private String username;
+	public String getTitle() {
+		return this.title;
+	}
+	public void setTitle(String decode) {
+		this.title=decode;
+	}
 }

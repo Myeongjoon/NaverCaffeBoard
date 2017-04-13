@@ -79,4 +79,32 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return this.enabled;
 	}
+
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setPassword(String password2) {
+		this.password = password2;
+	}
+
+	public void setId(String id2) {
+		this.id=id2;
+	}
+
+	public String getId() {
+		return this.id;
+	}
+
+	public void setUsername(String username2) {
+		this.username=username2;
+	}
 }
