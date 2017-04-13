@@ -30,12 +30,4 @@
 		<property name="order" value="0" />
 	</bean>
 
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean id="loggerInterceptor"
-				class="com.navercorp.mjboard.web.interceptor.LoggerInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors>
-
 </beans>

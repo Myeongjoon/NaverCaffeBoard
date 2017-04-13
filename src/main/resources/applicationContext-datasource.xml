@@ -36,13 +36,13 @@
 		</property>
 	</bean>
 
-	<bean id="sqlSessionEdu" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<bean id="sqlSessionEdu1" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations" value="classpath:/mapper/**/*SQL.xml" />
 		<property name="configLocation" value="classpath:mybatis_config.xml" />
 	</bean>
 
-	<mybatis:scan base-package="com.navercorp.mjboard"
-		factory-ref="sqlSessionEdu" annotation="org.springframework.stereotype.Repository" />
+	 <mybatis:scan base-package="com.navercorp.mjboard"
+		factory-ref="sqlSessionEdu1" annotation="org.springframework.stereotype.Repository" /> 
 
 </beans>
