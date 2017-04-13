@@ -19,4 +19,7 @@ public class Roles {
 	public void setUserId(String id) {
 		this.userId=id;
 	}
+	public String getUserId(){
+		return this.userId;
+	}
 }

@@ -82,18 +82,16 @@ public class User implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.password;
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.username;
 	}
 
-	public void setPassword(String password2) {
-		this.password = password2;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public void setId(String id2) {

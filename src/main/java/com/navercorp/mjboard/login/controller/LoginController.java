@@ -68,6 +68,8 @@ public class LoginController {
 
 	@RequestMapping(value = "/login/signup/insert")
 	public String InsertSignUpValues(User user, Model model) throws Exception {
+		System.out.println("user.password : " +user.getPassword() );
+		System.out.println("user.id : " +user.getId() );
 		return loginService.insertUserAndRedirect(user);
 	}
 }

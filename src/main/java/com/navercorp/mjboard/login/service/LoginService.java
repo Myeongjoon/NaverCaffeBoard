@@ -69,6 +69,7 @@ public class LoginService {
 	}
 
 	public User getPasswordEncodedUser(User user) {
+		System.out.println("password : "+user.getPassword());
 		String hashedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(hashedPassword);
 		return user;

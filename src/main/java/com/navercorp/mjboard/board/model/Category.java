@@ -26,6 +26,30 @@ public class Category {
 	private Integer page;
 	private Integer offset;
 
+	public void setId(String id){
+		this.id=id;
+	}
+	public String getId(){
+		return id;
+	}
+	public void setName(String name){
+		this.name=name;
+	}
+	public String getName(){
+		return this.name;
+	}
+	public void setPage(int page){
+		this.page=page;
+	}
+	public Integer getPage(){
+		return this.page;
+	}
+	public void setOffset(int offset){
+		this.offset=offset;
+	}
+	public Integer getOffset(){
+		return this.offset;
+	}
 	public Category() {
 
 	}

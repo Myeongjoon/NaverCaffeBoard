@@ -191,6 +191,7 @@ public class BoardService {
 	public boolean hasNext(Integer page, String category) {
 		Integer allBoardNum = selectAllBoardNum(category);
 		Integer currentPageBoardNum = new Integer(page * 10);
+		System.out.println(currentPageBoardNum.intValue()+"hasNext()"+allBoardNum.intValue());
 		return currentPageBoardNum.intValue() > allBoardNum.intValue() == true ? false : true;
 	}
 
