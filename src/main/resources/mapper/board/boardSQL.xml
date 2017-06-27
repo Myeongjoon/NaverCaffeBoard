@@ -3,7 +3,7 @@
 
 <mapper namespace="com.navercorp.mjboard.board.dao.BoardDAO">
 
-	<resultMap type="BoardDetail" id="boardDtlResultMap">
+	<resultMap type="boardDtl" id="boardDtlResultMap">
 		<id property="boardNo" column="board_no" />
 		<result property="title" column="title" />
 		<result property="hitCnt" column="hit_cnt" />
