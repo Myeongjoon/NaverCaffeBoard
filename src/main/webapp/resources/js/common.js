@@ -8,7 +8,7 @@ function Mysubmit() {
 		if (location.hostname == "localhost") {
 			this.frm.setAttribute("action", "http://localhost:8080/" + URI);
 		} else {
-			this.frm.setAttribute("action", "http://10.110.242.87/" + URI);
+			this.frm.setAttribute("action", "http://104.198.20.98/" + URI);
 		}
 		this.getValueByValue(value,name);
 	}
