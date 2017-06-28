@@ -28880,13 +28880,13 @@ new widgetHappybean({
 
 
 					<iframe name="cafe_main" id="cafe_main" title="카페 메인"
-						src="http://104.198.20.98/board/cafeMain"
+						src="http://104.198.174.207/board/cafeMain"
 						width="773" height="100%" frameborder="0" scrolling="no"
 						marginwidth="0" marginheight="0" allowtransparency="true"
 						allowfullscreen="" style="height: 1845px; width: 773px;"></iframe>
 
 					<script type="text/javascript">
-							$("cafe_main").src = "카페 메인" src="http://104.198.20.98/board/cafeMain";
+							$("cafe_main").src = "카페 메인" src="http://104.198.174.207/board/cafeMain";
 							</script>
 
 

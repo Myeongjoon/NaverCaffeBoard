@@ -128,11 +128,11 @@ div.autosourcing-stub {
 					<input id="gateOpen" type="hidden" value="1"> <input
 						id="searchviewtype" type="hidden" value="title">
 					<iframe name="cafe_main" id="cafe_main" title="카페 메인"
-						src="http://104.198.20.98/board/cafeMain?page=1"
+						src="http://104.198.174.207/board/cafeMain?page=1"
 						width="773" height="100%" 
 						style="height: 1845px; width: 773px;"></iframe>
 					<script type="text/javascript">
-							$("cafe_main").src = "카페 메인" src="http://104.198.20.98/board/cafeMain?page=1";
+							$("cafe_main").src = "카페 메인" src="http://104.198.174.207/board/cafeMain?page=1";
 							</script>
 				</div>
 			</div>
